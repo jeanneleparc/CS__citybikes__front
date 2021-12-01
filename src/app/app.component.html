@@ -9,6 +9,21 @@
 </div>
 
 <div class="content" role="main">
+  <p>Last updated at {{ data.last_updated }}</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let station of data?.data?.stations">
+        <th>{{ station.station_id }}</th>
+        <td>{{ station.station_status }}</td>
+      </tr>
+    </tbody>
+  </table>
   <!-- Footer -->
   <footer>
       Developped by CentraleSupélec students : Bouyssel Camille, Le Parc Jeanne, Ni Clara.

@@ -7,12 +7,13 @@ import { DataService } from './data.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  data: any = {};
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
 
     this.dataService.sendGetRequest().subscribe((data)=>{
-      console.log(data);
+      this.data = data[0];
     })  
   }
 }
