@@ -14,12 +14,18 @@
     <thead>
       <tr>
         <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Docks number</th>
+        <th scope="col">Bikes number</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let station of data?.data?.stations">
-        <th>{{ station.station_id }}</th>
+      <tr *ngFor="let station of data">
+        <th>{{ station.id }}</th>
+        <td>{{ station.name }}</td>
+        <td>{{ station.num_docks_available }}</td>
+        <td>{{ station.num_bikes_available }}</td>
         <td>{{ station.station_status }}</td>
       </tr>
     </tbody>

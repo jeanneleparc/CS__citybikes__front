@@ -13,7 +13,7 @@ export class AppComponent {
   ngOnInit() {
 
     this.dataService.sendGetRequest().subscribe((data)=>{
-      this.data = data[0];
+      this.data = data;
     })  
   }
 }
