@@ -9,21 +9,36 @@
 </div>
 
 <div class="content" role="main">
-  <p>Last updated at {{ data.last_updated }}</p>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let station of data?.data?.stations">
-        <th>{{ station.station_id }}</th>
-        <td>{{ station.station_status }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="data[0]; else spinner">
+    <p>Last updated at {{ data[0].last_updated }}</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Free Docks</th>
+          <th scope="col">Bikes Available</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let station of data">
+          <th>{{ station.id }}</th>
+          <td>{{ station.name }}</td>
+          <td>{{ station.num_docks_available }}</td>
+          <td>{{ station.num_bikes_available }}</td>
+          <td>{{ station.station_status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #spinner>
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </ng-template>
+  
+  
   <!-- Footer -->
   <footer>
       Developped by CentraleSupélec students : Bouyssel Camille, Le Parc Jeanne, Ni Clara.

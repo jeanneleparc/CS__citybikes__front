@@ -11,9 +11,9 @@ export class AppComponent {
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
-
     this.dataService.sendGetRequest().subscribe((data)=>{
-      this.data = data[0];
+      console.log("Number of stations displayed : ", data.length);
+      this.data = data;
     })  
   }
 }
