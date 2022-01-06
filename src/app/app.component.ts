@@ -12,7 +12,7 @@ export class AppComponent {
 
   ngOnInit() {
     this.dataService.sendGetRequest().subscribe((data)=>{
-      console.log("Nombre de stations affichées : ", data.length);
+      console.log("Number of stations displayed : ", data.length);
       this.data = data;
     })  
   }
