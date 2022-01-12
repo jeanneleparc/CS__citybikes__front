@@ -32,6 +32,7 @@ jobs:
       - run:
           name: lint
           command: npm lint
+
 workflows:
   node-tests:
     jobs:
