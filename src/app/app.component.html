@@ -1,24 +1,23 @@
 <div class="main">
   <!-- Toolbar -->
   <div class="toolbar" role="banner">
-    <img
-      width="40"
-      alt="Bike"
-      src="favicon.ico"
-    />
-    <span>NYC Citibikes</span>
+    <div class="upper-left-corner">
+      <img
+        width="40"
+        alt="Bike"
+        src="favicon.ico"
+      />
+      <span>NYC Citibikes</span>
+    </div>
+    <div class="upper-right-corner">
+      <p *ngIf="data[0]; else spinner" class="last-updated-date">Last updated at {{ last_updated_time_string }}</p>
+    </div>
   </div>
 
   <div class="content">
-    <p *ngIf="data[0]; else spinner">Last updated at {{ data[0].last_updated }}</p>
+    <div id="map"></div>
 
-    <div class="map-container">
-      <div class="map-frame">
-        <div id="map"></div>
-      </div>
-    </div>
-
-    <table *ngIf="data[0]; else spinner" class="table">
+    <!-- <table *ngIf="data[0]; else spinner" class="table">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -37,7 +36,7 @@
           <td>{{ station.station_status }}</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
   <ng-template #spinner>
     <div class="spinner-border" role="status">

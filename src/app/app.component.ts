@@ -9,6 +9,7 @@ import * as L from 'leaflet';
 })
 export class AppComponent implements AfterViewInit {
   private map : any;
+  public last_updated_time_string : string = '';
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -32,7 +33,10 @@ export class AppComponent implements AfterViewInit {
     this.dataService.sendGetRequest().subscribe((data) => {
       console.log('Number of stations displayed : ', data.length);
       this.data = data;
-    });
+      const last_updated_time = new Date(data[0].last_updated)
+      this.last_updated_time_string = `${last_updated_time.toLocaleTimeString()} on ${last_updated_time.toDateString()}`
+      console.log(last_updated_time.toLocaleTimeString(), 'on', last_updated_time.toDateString());
+    })  
   }
 
   ngAfterViewInit(): void {
