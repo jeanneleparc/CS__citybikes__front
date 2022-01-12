@@ -10,14 +10,11 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
 
       # Download and cache dependencies
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@5'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
