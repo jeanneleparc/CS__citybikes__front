@@ -13,7 +13,7 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
-      
+
       # Download and cache dependencies
       - run:
           name: update-npm
@@ -30,8 +30,8 @@ jobs:
       
       # run tests!
       - run:
-          name: test
-          command: npm test
+          name: lint
+          command: npm lint
 workflows:
   node-tests:
     jobs:
