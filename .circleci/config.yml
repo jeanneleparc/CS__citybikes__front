@@ -1,5 +1,11 @@
 version: 2.1
 
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+
 jobs:
   build:
     docker:
@@ -26,8 +32,3 @@ jobs:
       - run:
           name: lint
           command: npm lint
-
-workflows:
-  node-tests:
-    jobs:
-      - build
