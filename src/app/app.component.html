@@ -1,24 +1,24 @@
-<!-- Toolbar -->
-<div class="toolbar" role="banner">
-  <img
-    width="40"
-    alt="Bike"
-    src="favicon.ico"
-  />
-  <span>NYC Citibikes</span>
-</div>
+<div class="main">
+  <!-- Toolbar -->
+  <div class="toolbar" role="banner">
+    <img
+      width="40"
+      alt="Bike"
+      src="favicon.ico"
+    />
+    <span>NYC Citibikes</span>
+  </div>
 
-<div class="content" role="main">
-  <div *ngIf="true; else spinner">
-    <p>Last updated at {{ data[0].last_updated }}</p>
-    <!-- <div id="map"></div> -->
+  <div class="content">
+    <p *ngIf="data[0]; else spinner">Last updated at {{ data[0].last_updated }}</p>
 
     <div class="map-container">
       <div class="map-frame">
         <div id="map"></div>
       </div>
     </div>
-    <table class="table">
+
+    <table *ngIf="data[0]; else spinner" class="table">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -50,6 +50,6 @@
   <footer>
       Developped by CentraleSupélec students : Bouyssel Camille, Le Parc Jeanne, Ni Clara.
   </footer>
-</div>
 
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
+</div>

@@ -43,7 +43,7 @@ export class AppComponent implements AfterViewInit {
       id: 'mapbox/streets-v11',
       tileSize: 512,
       zoomOffset: -1,
-      accessToken: ''
+      accessToken: 'pk.eyJ1IjoiY2xhcmEtbmkiLCJhIjoiY2t5MzQ3cXQ2MHJ5ZjJybWtmN2w5b3dqMSJ9.zrQ2bq62jaJdYXSPmvxMKA'
     }).addTo(this.map);
     //this.initMap();
   }
