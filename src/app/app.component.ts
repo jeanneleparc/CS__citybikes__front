@@ -14,6 +14,6 @@ export class AppComponent {
     this.dataService.sendGetRequest().subscribe((data)=>{
       console.log("Number of stations displayed : ", data.length);
       this.data = data;
-    })  
+    });
   }
 }
