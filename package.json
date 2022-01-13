@@ -7,8 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "eslint src/app/*",
-    "prettier": "eslint src/app/* --fix"
+    "lint": "eslint \"src/app/**/*.{ts,html}\"",
+    "prettier": "eslint \"src/app/**/*.{ts,html}\" --fix"
   },
   "gitHooks": {
     "pre-push": "npm run prettier"
