@@ -36,9 +36,7 @@ export class AppComponent implements AfterViewInit {
     this.initMap();
 
     this.dataService.sendGetRequest().subscribe((data) => {
-      console.log('Number of stations displayed : ', data.length);
       this.stations = data;
-      console.log(data[0]);
       this.setUpLastUpdatedTime(data[0].last_updated);
       this.addMarkers();
     });
@@ -71,7 +69,6 @@ export class AppComponent implements AfterViewInit {
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
 
       marker.addTo(this.map).on('click', () => {
-        console.log('On va toggle la sidebar !');
         if (this.sidebarIsVisible) {
           if (station != this.selectedStation) {
             this.selectedStation = station;
@@ -96,7 +93,7 @@ export class AppComponent implements AfterViewInit {
 
   setUpLastUpdatedTime(brutLastUpdatedTime: string) {
     const lastUpdatedDate = new Date(brutLastUpdatedTime);
-    this.lastUpdatedTime = `${lastUpdatedDate.toLocaleTimeString()} on ${lastUpdatedDate.toDateString()}`;
+    this.lastUpdatedTime = `${lastUpdatedDate.toLocaleTimeString()} on ${lastUpdatedDate.toDateString()} EST`;
   }
 
   openSidebar(station: any) {
