@@ -1,5 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { DataService } from './data.service';
+import { Component } from '@angular/core';
 import * as moment from 'moment-timezone';
 import { BehaviorSubject } from 'rxjs';
 
