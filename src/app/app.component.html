@@ -15,9 +15,13 @@
 
 <div class="main">
   <div id="mySidepanel" class="sidepanel">
+    <div class="sidepannel-header">
+      <div class="sidepannel-title">
+        <a href="javascript:void(0)" class="close-btn" (click)="closeSidebar()">&times;</a>
+        <h1>{{ selectedStation.name }}</h1>
+      </div>
+    </div>
     <div class="sidepannel-container">
-      <a href="javascript:void(0)" class="close-btn" (click)="closeSidebar()">&times;</a>
-      <h1>{{ selectedStation.name }}</h1>
       <p>{{ selectedStation.num_bikes_available }} available bikes</p>
       <p>{{ selectedStation.num_docks_available }} available docks</p>
     </div>
