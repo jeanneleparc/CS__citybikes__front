@@ -74,7 +74,7 @@ footer {
 }
 
 .sidepannel-header {
-  height: 15%;
+  height: 12%;
 }
 
 .sidepannel-title {
@@ -105,11 +105,23 @@ footer {
 }
 
 .sidepannel-container {
-  padding: 5px 30px;
+  padding: 0 30px;
 }
 
 .sidepanel p {
-  padding-top: 0;
-  padding-bottom: 3px;
+  padding: 0 18px;
   margin: 0 0;
+}
+
+.text-with-icon {
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  font-size: large;
+}
+
+.icon {
+  display: flex;
+  width: 40px;
+  justify-content: center;
 }

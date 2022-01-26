@@ -22,8 +22,18 @@
       </div>
     </div>
     <div class="sidepannel-container">
-      <p>{{ selectedStation.num_bikes_available }} available bikes</p>
-      <p>{{ selectedStation.num_docks_available }} available docks</p>
+      <div class="text-with-icon">
+        <div class="icon">
+          <i class="fas fa-bicycle fa-2x"></i>
+        </div>
+        <p>{{ selectedStation.num_bikes_available }} available bikes</p>
+      </div>
+      <div class="text-with-icon">
+        <div class="icon">
+          <i class="fas fa-parking fa-2x"></i>
+        </div>
+        <p>{{ selectedStation.num_docks_available }} available docks</p>
+      </div>
     </div>
   </div>
   <div class="content">
