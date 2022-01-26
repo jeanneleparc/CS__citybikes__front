@@ -2,6 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { DataService } from './data.service';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import * as moment from 'moment-timezone';
 
 // icon de base
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -109,8 +110,10 @@ export class AppComponent implements AfterViewInit {
   }
 
   setUpLastUpdatedTime(brutLastUpdatedTime: string) {
-    const lastUpdatedDate = new Date(brutLastUpdatedTime);
-    this.lastUpdatedTime = `${lastUpdatedDate.toLocaleTimeString()} on ${lastUpdatedDate.toDateString()} EST`;
+    const lastUpdatedDate = moment(brutLastUpdatedTime).tz('America/New_York');
+    this.lastUpdatedTime = `${lastUpdatedDate.format(
+      'hh:mm:ss a'
+    )} on ${lastUpdatedDate.format('YYYY-MM-DD')} EST`;
   }
 
   addMarkers(): void {
