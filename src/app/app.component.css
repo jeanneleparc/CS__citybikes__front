@@ -61,6 +61,7 @@ footer {
 
 /* The sidepanel menu */
 .sidepanel {
+  box-shadow: 0 -1px 2px rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);
   height: 100%;
   width: 0%; /* 0 width - change this with JavaScript */
   position: fixed;
@@ -72,14 +73,20 @@ footer {
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
 }
 
-.sidepannel-container {
-  padding: 10px;
+.sidepannel-header {
+  height: 15%;
+}
+
+.sidepannel-title {
+  background-color: #ffa05b;
+  display: flex;
 }
 
 .close-btn {
+  padding: 5px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: white;
   display: block;
   transition: 0.3s;
   top: 0;
@@ -87,12 +94,18 @@ footer {
 }
 
 .close-btn:hover {
-  color: #f1f1f1;
+  color: #1976d2;
 }
 
 .sidepanel h1 {
+  color: white;
   font-size: 1.5rem;
-  padding: 30px 0 15px 0;
+  padding: 12px 5px;
+  margin: 0px;
+}
+
+.sidepannel-container {
+  padding: 5px 30px;
 }
 
 .sidepanel p {

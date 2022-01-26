@@ -1,7 +1,9 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { DataService } from './data.service';
 import * as L from 'leaflet';
+import 'leaflet.markercluster';
 
+// icon de base
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
 const shadowUrl = 'assets/marker-shadow.png';
@@ -17,6 +19,49 @@ const iconDefault = L.icon({
 });
 L.Marker.prototype.options.icon = iconDefault;
 
+// icon 2
+const blue = '#247dce';
+const red = '#f26157';
+const yellow = '#f2cd5d';
+var caption = '',
+  size = 10,
+  border = 2;
+
+var captionStyles = `\
+  transform: rotate(-45deg); \
+  display:block; \
+  width: ${size * 3}px; \
+  text-align: center; \
+  line-height: ${size * 3}px;`;
+
+const iconBlue = createColoredMarker(blue);
+const iconRed = createColoredMarker(red);
+const iconYellow = createColoredMarker(yellow);
+
+function getColoredMarker(color: string): string {
+  return `\
+    background-color: ${color}; \
+    width: ${size * 3}px; \
+    height: ${size * 3}px; \
+    display: block; \
+    left: ${size * -1.5}px; \
+    top: ${size * -1.5}px; \
+    position: relative; \
+    border-radius: ${size * 3}px ${size * 3}px 0; \
+    transform: rotate(45deg); \
+    border: ${border}px solid #FFFFFF;`;
+}
+
+function createColoredMarker(color: string): any {
+  return L.divIcon({
+    className: `color-pin-${color}`,
+    iconAnchor: [border, size * 2 + border * 2],
+    popupAnchor: [0, -(size * 3 + border)],
+    // eslint-disable-next-line prettier/prettier
+    html: `<span style="${getColoredMarker(color)}"><span style="${captionStyles}">${caption}</span></span>`
+  });
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -25,6 +70,7 @@ L.Marker.prototype.options.icon = iconDefault;
 export class AppComponent implements AfterViewInit {
   stations: any = {};
   selectedStation: any = {};
+  selectedMarker: any;
   private map: any;
   sidebar: any;
   sidebarIsVisible: boolean = false;
@@ -62,24 +108,44 @@ export class AppComponent implements AfterViewInit {
     this.sidebar = document.getElementById('mySidepanel');
   }
 
+  setUpLastUpdatedTime(brutLastUpdatedTime: string) {
+    const lastUpdatedDate = new Date(brutLastUpdatedTime);
+    this.lastUpdatedTime = `${lastUpdatedDate.toLocaleTimeString()} on ${lastUpdatedDate.toDateString()} EST`;
+  }
+
   addMarkers(): void {
+    const markers = L.markerClusterGroup({
+      spiderfyOnMaxZoom: false,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false,
+      maxClusterRadius: 50,
+    });
     for (const station of this.stations) {
       const { latitude, longitude } = station;
-      const marker = L.marker([latitude, longitude]);
-      // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
-
-      marker.addTo(this.map).on('click', () => {
-        if (this.sidebarIsVisible) {
-          if (station != this.selectedStation) {
-            this.selectedStation = station;
-          } else {
-            this.closeSidebar();
-          }
-        } else {
-          this.openSidebar(station);
-        }
+      var marker = L.marker([latitude, longitude], { icon: iconBlue });
+      if (station.station_status != 'active' || !station.is_installed) {
+        marker = L.marker([latitude, longitude], { icon: iconRed });
+      }
+      marker.on('click', (event) => {
+        this.manageSelectedMarker(station, event.target);
       });
+      // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
+      markers.addLayer(marker);
     }
+    this.map.addLayer(markers);
+  }
+
+  manageSelectedMarker(station: any, newSelectedMarker: any) {
+    if (station != this.selectedStation) {
+      if (this.selectedMarker) this.selectedMarker.setIcon(iconBlue);
+      if (!this.sidebarIsVisible) this.openSidebar(station);
+    } else {
+      if (this.sidebarIsVisible) this.closeSidebar();
+      else this.openSidebar(station);
+    }
+    this.selectedStation = station;
+    this.selectedMarker = newSelectedMarker;
+    newSelectedMarker.setIcon(iconYellow);
   }
 
   createMarkerPopup(station: any): string {
@@ -91,14 +157,9 @@ export class AppComponent implements AfterViewInit {
     );
   }
 
-  setUpLastUpdatedTime(brutLastUpdatedTime: string) {
-    const lastUpdatedDate = new Date(brutLastUpdatedTime);
-    this.lastUpdatedTime = `${lastUpdatedDate.toLocaleTimeString()} on ${lastUpdatedDate.toDateString()} EST`;
-  }
-
   openSidebar(station: any) {
     this.selectedStation = station;
-    this.sidebar.style.width = '250px';
+    this.sidebar.style.width = '25%';
     this.sidebarIsVisible = true;
   }
 
