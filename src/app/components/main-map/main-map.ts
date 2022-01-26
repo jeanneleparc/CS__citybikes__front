@@ -1,0 +1,147 @@
+import { Component, AfterViewInit, Input, Output, OnInit } from '@angular/core';
+import * as L from 'leaflet';
+import 'leaflet.markercluster';
+import { BehaviorSubject } from 'rxjs';
+import { DataService } from 'src/app/data.service';
+
+// icon de base
+const iconRetinaUrl = 'assets/marker-icon-2x.png';
+const iconUrl = 'assets/marker-icon.png';
+const shadowUrl = 'assets/marker-shadow.png';
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
+});
+L.Marker.prototype.options.icon = iconDefault;
+
+// icon with colors
+const blue = '#247dce';
+const red = '#f26157';
+const yellow = '#f2cd5d';
+var caption = '',
+  size = 10,
+  border = 2;
+
+var captionStyles = `\
+  transform: rotate(-45deg); \
+  display:block; \
+  width: ${size * 3}px; \
+  text-align: center; \
+  line-height: ${size * 3}px;`;
+
+const iconBlue = createColoredMarker(blue);
+const iconRed = createColoredMarker(red);
+const iconYellow = createColoredMarker(yellow);
+
+function getColoredMarker(color: string): string {
+  return `\
+    background-color: ${color}; \
+    width: ${size * 3}px; \
+    height: ${size * 3}px; \
+    display: block; \
+    left: ${size * -1.5}px; \
+    top: ${size * -1.5}px; \
+    position: relative; \
+    border-radius: ${size * 3}px ${size * 3}px 0; \
+    transform: rotate(45deg); \
+    border: ${border}px solid #FFFFFF;`;
+}
+
+function createColoredMarker(color: string): any {
+  return L.divIcon({
+    className: `color-pin-${color}`,
+    iconAnchor: [border, size * 2 + border * 2],
+    popupAnchor: [0, -(size * 3 + border)],
+    // eslint-disable-next-line prettier/prettier
+    html: `<span style="${getColoredMarker(color)}"><span style="${captionStyles}">${caption}</span></span>`
+  });
+}
+
+@Component({
+  selector: 'main-map',
+  templateUrl: './main-map.html',
+  styleUrls: ['./main-map.css'],
+})
+export class MainMap implements AfterViewInit {
+  stations: any[] = [];
+  @Output() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  @Output() $lastUpdatedTime: BehaviorSubject<string> = new BehaviorSubject('');
+  selectedMarker: any;
+  private map: any;
+
+  constructor(private dataService: DataService) {}
+
+  ngAfterViewInit(): void {
+    this.initMap();
+    this.dataService.sendGetRequest().subscribe((data) => {
+      this.stations = data;
+      this.$lastUpdatedTime.next(data[0].last_updated);
+      this.addMarkers(data);
+    });
+  }
+
+  private initMap(): void {
+    this.map = L.map('map').setView([40.77, -73.968565], 13);
+    L.tileLayer(
+      'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+      {
+        attribution:
+          'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken:
+          'pk.eyJ1IjoiY2xhcmEtbmkiLCJhIjoiY2t5MzQ3cXQ2MHJ5ZjJybWtmN2w5b3dqMSJ9.zrQ2bq62jaJdYXSPmvxMKA',
+      }
+    ).addTo(this.map);
+  }
+
+  addMarkers(stations: any[]): void {
+    const markers = L.markerClusterGroup({
+      spiderfyOnMaxZoom: false,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false,
+      maxClusterRadius: 50,
+    });
+    for (const station of stations) {
+      const { latitude, longitude } = station;
+      var marker = L.marker([latitude, longitude], { icon: iconBlue });
+      if (station.station_status != 'active' || !station.is_installed) {
+        marker = L.marker([latitude, longitude], { icon: iconRed });
+      }
+      marker.on('click', (event) => {
+        this.manageSelectedMarker(station, event.target);
+      });
+      // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
+      markers.addLayer(marker);
+    }
+    this.map.addLayer(markers);
+  }
+
+  manageSelectedMarker(station: any, newSelectedMarker: any) {
+    if (!this.selectedMarker) {
+      newSelectedMarker.setIcon(iconYellow);
+    } else if (newSelectedMarker != this.selectedMarker) {
+      this.selectedMarker.setIcon(iconBlue);
+      newSelectedMarker.setIcon(iconYellow);
+    }
+    this.$selectedStation.next(station);
+    this.selectedMarker = newSelectedMarker;
+  }
+
+  createMarkerPopup(station: any): string {
+    return (
+      `` +
+      `<h6>Name: ${station.name}</h6>` +
+      `<div>${station.num_bikes_available} available bikes</div>` +
+      `<div>${station.num_docks_available} available docks</div>`
+    );
+  }
+}
