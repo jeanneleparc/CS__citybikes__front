@@ -20,7 +20,7 @@
 
 <div class="main">
   <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
-  <main-side-panel [$selectedStation]="$selectedStation"></main-side-panel>
+  <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
   
   <!-- Footer -->
   <footer>

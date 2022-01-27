@@ -24,6 +24,10 @@ export class AppComponent implements OnInit {
     this.dataService.sendGetRequest().subscribe((data) => {
       this.$stations.next(data);
       this.setUpLastUpdatedTime(data[0].last_updated);
+      if (this.$selectedStation.getValue()) {
+        this.refreshSelectedStation(data, this.$selectedStation.getValue());
+      }
+      this.loading = false;
     });
   }
 
@@ -35,13 +39,18 @@ export class AppComponent implements OnInit {
         'hh:mm a'
       )} on ${lastUpdatedDate.format('YYYY-MM-DD')} EST`;
     }
-    this.loading = false;
+  }
+
+  refreshSelectedStation(stations: any[], prevSelectedStation: any): void {
+    const newSelectedStation = stations.find((station) => {
+      return station.id == prevSelectedStation.id;
+    });
+    this.$selectedStation.next(newSelectedStation);
   }
 
   triggerRefresh() {
     this.refreshData();
     this.loading = true;
-    this.$selectedStation.next({});
   }
 
   changeSelectedStation(newSelectedStation: any) {

@@ -7,17 +7,18 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./main-side-panel.css'],
 })
 export class MainSidePanel implements OnInit {
+  @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  @Input() loading: boolean = false;
   sidePanel: any;
   sidePanelIsOpen: boolean = false;
   prevSelectedStation: any = {};
-  @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor() {}
 
   ngOnInit(): void {
     this.sidePanel = document.getElementById('mySidepanel');
     this.$selectedStation.subscribe((selectedStation) => {
-      if (!selectedStation.id) {
+      if (!selectedStation || !selectedStation.id) {
         this.closeSidePanel();
         return;
       }
