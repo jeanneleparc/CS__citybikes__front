@@ -15,9 +15,7 @@
 
 <div class="main">
   <main-map ($lastUpdatedTime)="setUpLastUpdatedTime($event)" ($selectedStation)="changeSelectedStation($event)"></main-map>
-  <main-side-panel [$selectedStation]="$selectedStation"></main-side-panel>
-  <bar-chart [$selectedStation]="$selectedStation" [$lastUpdatedTime]="$lastUpdatedDateFromMap"></bar-chart>
-
+  <main-side-panel [$selectedStation]="$selectedStation" ></main-side-panel>
   <!-- Footer -->
   <footer>
       Developped by CentraleSupélec students : Bouyssel Camille, Le Parc Jeanne, Ni Clara.

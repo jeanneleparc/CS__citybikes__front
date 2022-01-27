@@ -24,9 +24,11 @@
     "@angular/platform-browser-dynamic": "~12.1.0-",
     "@angular/router": "~12.1.0-",
     "@types/leaflet.markercluster": "^1.4.6",
+    "chart.js": "^2.9.4",
     "leaflet": "^1.7.1",
     "leaflet.markercluster": "^1.5.3",
     "moment-timezone": "^0.5.34",
+    "ng2-charts": "^2.4.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
