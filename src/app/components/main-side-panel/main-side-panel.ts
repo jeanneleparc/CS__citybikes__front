@@ -18,6 +18,7 @@ export class MainSidePanel implements OnInit {
     this.sidebar = document.getElementById('mySidepanel');
     this.$selectedStation.subscribe((selectedStation) => {
       if (!selectedStation.id) {
+        this.closeSidebar();
         return;
       }
       if (selectedStation == this.prevSelectedStation) {

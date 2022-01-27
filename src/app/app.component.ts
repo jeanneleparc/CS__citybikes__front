@@ -21,7 +21,7 @@ export class AppComponent {
       const lastUpdatedDate =
         moment(brutLastUpdatedTime).tz('America/New_York');
       this.lastUpdatedTime = `${lastUpdatedDate.format(
-        'hh:mm:ss a'
+        'hh:mm a'
       )} on ${lastUpdatedDate.format('YYYY-MM-DD')} EST`;
     }
     this.loading = false;
@@ -30,6 +30,7 @@ export class AppComponent {
   triggerRefresh() {
     this.$refresh.next(true);
     this.loading = true;
+    this.$selectedStation.next({});
   }
 
   changeSelectedStation(newSelectedStation: any) {
