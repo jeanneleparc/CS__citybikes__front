@@ -18,23 +18,26 @@ export class MainSidePanel implements OnInit {
   ngOnInit(): void {
     this.sidePanel = document.getElementById('mySidepanel');
     this.$selectedStation.subscribe((selectedStation) => {
-      if (!selectedStation || !selectedStation.id) {
-        this.closeSidePanel();
-        return;
-      }
-      if (selectedStation == this.prevSelectedStation) {
-        if (this.sidePanelIsOpen) {
-          this.closeSidePanel();
-        } else {
-          this.openSidePanel();
-        }
-      } else {
-        this.prevSelectedStation = selectedStation;
-        if (!this.sidePanelIsOpen) {
-          this.openSidePanel();
-        }
-      }
+      this.manageSelectedStation(selectedStation);
     });
+  }
+
+  manageSelectedStation(selectedStation: any) {
+    // if selected station is empty, close sidePanel
+    if (!selectedStation || !selectedStation.id) {
+      this.closeSidePanel();
+      return;
+    }
+    // if selected station is the same than before, close panel if it is opened, otherwise open it
+    if (selectedStation == this.prevSelectedStation) {
+      if (this.sidePanelIsOpen) this.closeSidePanel();
+      else this.openSidePanel();
+    }
+    // if selected station is different, open panel if it is not opened yet
+    else {
+      this.prevSelectedStation = selectedStation;
+      if (!this.sidePanelIsOpen) this.openSidePanel();
+    }
   }
 
   openSidePanel() {
@@ -45,5 +48,9 @@ export class MainSidePanel implements OnInit {
   public closeSidePanel() {
     this.sidePanel.style.width = '0';
     this.sidePanelIsOpen = false;
+  }
+
+  isStationActive(station: any) {
+    return station.station_status == 'active';
   }
 }

@@ -66,7 +66,7 @@ export class MainMap implements AfterViewInit {
     for (const station of stations) {
       const { latitude, longitude } = station;
       var marker = L.marker([latitude, longitude], { icon: iconBlue });
-      if (station.station_status != 'active' || !station.is_installed) {
+      if (!this.stationIsActive(station)) {
         marker = L.marker([latitude, longitude], { icon: iconRed });
       }
       marker.on('click', (event) => {
@@ -82,7 +82,12 @@ export class MainMap implements AfterViewInit {
     if (!this.selectedMarker) {
       newSelectedMarker.setIcon(iconYellow);
     } else if (newSelectedMarker != this.selectedMarker) {
-      this.selectedMarker.setIcon(iconBlue);
+      const prevSelectedStation = this.$selectedStation.getValue();
+      if (!this.stationIsActive(prevSelectedStation)) {
+        this.selectedMarker.setIcon(iconRed);
+      } else {
+        this.selectedMarker.setIcon(iconBlue);
+      }
       newSelectedMarker.setIcon(iconYellow);
     }
     this.$selectedStation.next(station);
@@ -96,5 +101,9 @@ export class MainMap implements AfterViewInit {
       `<div>${station.num_bikes_available} available bikes</div>` +
       `<div>${station.num_docks_available} available docks</div>`
     );
+  }
+
+  stationIsActive(station: any) {
+    return station.station_status == 'active';
   }
 }
