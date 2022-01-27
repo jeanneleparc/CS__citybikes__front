@@ -11,6 +11,7 @@ export class AppComponent {
   sidebarIsVisible: boolean = false;
   lastUpdatedTime: string = '';
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  $lastUpdatedDateFromMap: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor() {}
 
