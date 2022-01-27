@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import * as moment from 'moment-timezone';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,9 @@ import { BehaviorSubject } from 'rxjs';
 export class AppComponent {
   sidebarIsVisible: boolean = false;
   lastUpdatedTime: string = '';
+  $refresh: Subject<boolean> = new Subject();
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  loading: boolean = false;
 
   constructor() {}
 
@@ -22,6 +24,12 @@ export class AppComponent {
         'hh:mm:ss a'
       )} on ${lastUpdatedDate.format('YYYY-MM-DD')} EST`;
     }
+    this.loading = false;
+  }
+
+  triggerRefresh() {
+    this.$refresh.next(true);
+    this.loading = true;
   }
 
   changeSelectedStation(newSelectedStation: any) {
