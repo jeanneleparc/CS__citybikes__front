@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, Output, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { DataService } from 'src/app/data.service';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { DataService } from 'src/app/data.service';
 import {
   iconBlue,
   iconYellow,
@@ -15,10 +15,8 @@ import {
   styleUrls: ['./main-map.css'],
 })
 export class MainMap implements AfterViewInit {
-  stations: any[] = [];
-  @Input() $refresh: Subject<boolean> = new Subject();
+  @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Output() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
-  @Output() $lastUpdatedTime: BehaviorSubject<string> = new BehaviorSubject('');
   selectedMarker: any;
   markers: any;
   private map: any;
@@ -27,8 +25,7 @@ export class MainMap implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.refreshData();
-    this.$refresh.subscribe(() => {
+    this.$stations.subscribe(() => {
       this.refreshData();
     });
   }
@@ -51,12 +48,8 @@ export class MainMap implements AfterViewInit {
   }
 
   refreshData(): void {
-    this.dataService.sendGetRequest().subscribe((data) => {
-      this.stations = data;
-      this.$lastUpdatedTime.next(data[0].last_updated);
-      if (this.markers) this.clearMap();
-      this.addMarkers(data);
-    });
+    if (this.markers) this.clearMap();
+    this.addMarkers(this.$stations.getValue());
   }
 
   clearMap(): void {

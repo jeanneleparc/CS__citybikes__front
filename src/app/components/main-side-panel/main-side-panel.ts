@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./main-side-panel.css'],
 })
 export class MainSidePanel implements OnInit {
-  sidebar: any;
+  sidePanel: any;
   sidePanelIsOpen: boolean = false;
   prevSelectedStation: any = {};
   @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
@@ -15,34 +15,34 @@ export class MainSidePanel implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.sidebar = document.getElementById('mySidepanel');
+    this.sidePanel = document.getElementById('mySidepanel');
     this.$selectedStation.subscribe((selectedStation) => {
       if (!selectedStation.id) {
-        this.closeSidebar();
+        this.closeSidePanel();
         return;
       }
       if (selectedStation == this.prevSelectedStation) {
         if (this.sidePanelIsOpen) {
-          this.closeSidebar();
+          this.closeSidePanel();
         } else {
-          this.openSidebar();
+          this.openSidePanel();
         }
       } else {
         this.prevSelectedStation = selectedStation;
         if (!this.sidePanelIsOpen) {
-          this.openSidebar();
+          this.openSidePanel();
         }
       }
     });
   }
 
-  openSidebar() {
-    this.sidebar.style.width = '25%';
+  openSidePanel() {
+    this.sidePanel.style.width = '25%';
     this.sidePanelIsOpen = true;
   }
 
-  public closeSidebar() {
-    this.sidebar.style.width = '0';
+  public closeSidePanel() {
+    this.sidePanel.style.width = '0';
     this.sidePanelIsOpen = false;
   }
 }

@@ -1,20 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment-timezone';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { DataService } from './data.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  sidebarIsVisible: boolean = false;
+export class AppComponent implements OnInit {
+  $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   lastUpdatedTime: string = '';
-  $refresh: Subject<boolean> = new Subject();
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   loading: boolean = false;
 
-  constructor() {}
+  constructor(private dataService: DataService) {}
+
+  ngOnInit(): void {
+    this.refreshData();
+  }
+
+  refreshData(): void {
+    this.dataService.sendGetRequest().subscribe((data) => {
+      this.$stations.next(data);
+      this.setUpLastUpdatedTime(data[0].last_updated);
+    });
+  }
 
   setUpLastUpdatedTime(brutLastUpdatedTime: string) {
     if (brutLastUpdatedTime != '') {
@@ -28,7 +39,7 @@ export class AppComponent {
   }
 
   triggerRefresh() {
-    this.$refresh.next(true);
+    this.refreshData();
     this.loading = true;
     this.$selectedStation.next({});
   }

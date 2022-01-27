@@ -19,7 +19,7 @@
 </div>
 
 <div class="main">
-  <main-map [$refresh]="$refresh" ($lastUpdatedTime)="setUpLastUpdatedTime($event)" ($selectedStation)="changeSelectedStation($event)"></main-map>
+  <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
   <main-side-panel [$selectedStation]="$selectedStation"></main-side-panel>
   
   <!-- Footer -->
