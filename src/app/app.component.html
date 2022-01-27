@@ -9,42 +9,13 @@
     <span>NYC Citibikes</span>
   </div>
   <div class="upper-right-corner">
-    <p *ngIf="lastUpdatedTime; else spinner" class="last-updated-date">Last updated at {{ lastUpdatedTime }}</p>
+    <p *ngIf="lastUpdatedTime != ''; else spinner" class="last-updated-date">Last updated at {{ lastUpdatedTime }}</p>
   </div>
 </div>
 
 <div class="main">
-  <div id="mySidepanel" class="sidepanel">
-    <div class="sidepannel-header">
-      <div class="sidepannel-title">
-        <a href="javascript:void(0)" class="close-btn" (click)="closeSidebar()">&times;</a>
-        <h1>{{ selectedStation.name }}</h1>
-      </div>
-    </div>
-    <div class="sidepannel-container">
-      <div class="text-with-icon">
-        <div class="icon">
-          <i class="fas fa-bicycle fa-2x"></i>
-        </div>
-        <p>{{ selectedStation.num_bikes_available }} available bikes</p>
-      </div>
-      <div class="text-with-icon">
-        <div class="icon">
-          <i class="fas fa-parking fa-2x"></i>
-        </div>
-        <p>{{ selectedStation.num_docks_available }} available docks</p>
-      </div>
-    </div>
-  </div>
-  <div class="content">
-    <div id="map"></div>
-  </div>
-  <ng-template #spinner>
-    <div class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </ng-template>
-  
+  <main-map ($lastUpdatedTime)="setUpLastUpdatedTime($event)" ($selectedStation)="changeSelectedStation($event)"></main-map>
+  <main-side-panel [$selectedStation]="$selectedStation"></main-side-panel>
   
   <!-- Footer -->
   <footer>
@@ -53,3 +24,9 @@
 
   <router-outlet></router-outlet>
 </div>
+
+<ng-template #spinner>
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</ng-template>

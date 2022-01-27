@@ -1,0 +1,22 @@
+<div id="mySidepanel" class="sidepanel">
+    <div class="sidepannel-header">
+        <div class="sidepannel-title">
+        <a href="javascript:void(0)" class="close-btn" (click)="closeSidebar()">&times;</a>
+        <h1>{{ prevSelectedStation.name }}</h1>
+        </div>
+    </div>
+    <div class="sidepannel-container">
+        <div class="text-with-icon">
+        <div class="icon">
+            <i class="fas fa-bicycle fa-2x"></i>
+        </div>
+        <p>{{ prevSelectedStation.num_bikes_available }} available bikes</p>
+        </div>
+        <div class="text-with-icon">
+        <div class="icon">
+            <i class="fas fa-parking fa-2x"></i>
+        </div>
+        <p>{{ prevSelectedStation.num_docks_available }} available docks</p>
+        </div>
+    </div>
+</div>
