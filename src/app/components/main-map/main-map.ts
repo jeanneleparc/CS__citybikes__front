@@ -25,7 +25,7 @@ export class MainMap implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.dataService.sendGetStatusRequest().subscribe((data) => {
+    this.dataService.sendGetRequest().subscribe((data) => {
       this.stations = data;
       this.$lastUpdatedTime.next(data[0].last_updated);
       this.addMarkers(data);
