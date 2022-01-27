@@ -5,9 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MainMap } from './components/main-map/main-map';
 import { MainSidePanel } from './components/main-side-panel/main-side-panel';
+import { BarChart } from './components/bar-chart/bar-chart';
 
 @NgModule({
-  declarations: [AppComponent, MainMap, MainSidePanel],
+  declarations: [AppComponent, MainMap, MainSidePanel, BarChart],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
