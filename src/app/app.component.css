@@ -31,6 +31,9 @@
 }
 
 .upper-right-corner {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
   width: 50%;
 }
 
@@ -44,12 +47,23 @@
 }
 
 .last-updated-date {
-  margin: 16px;
   text-align: end;
+  margin: 0;
 }
 
 footer {
   display: flex;
   align-items: center;
   line-height: 20px;
+}
+
+.spinner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.button-container {
+  width: 80px;
 }
