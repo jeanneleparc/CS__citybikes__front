@@ -9,13 +9,18 @@
     <span>NYC Citibikes</span>
   </div>
   <div class="upper-right-corner">
-    <p *ngIf="lastUpdatedTime != ''; else spinner" class="last-updated-date">Last updated at {{ lastUpdatedTime }}</p>
+    <div class="spinner-container">
+      <p *ngIf="lastUpdatedTime != ''; else spinner" class="last-updated-date">Last updated at {{ lastUpdatedTime }}</p>
+    </div>
+      <div class="spinner-container button-container">
+      <button *ngIf="!loading; else spinner" class="btn btn-outline-light btn-refresh" (click)="triggerRefresh()">Refresh</button>
+    </div>
   </div>
 </div>
 
 <div class="main">
-  <main-map ($lastUpdatedTime)="setUpLastUpdatedTime($event)" ($selectedStation)="changeSelectedStation($event)"></main-map>
-  <main-side-panel [$selectedStation]="$selectedStation"></main-side-panel>
+  <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
+  <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
   
   <!-- Footer -->
   <footer>

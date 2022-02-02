@@ -1,8 +1,8 @@
-import { Component, AfterViewInit, Output } from '@angular/core';
-import * as L from 'leaflet';
-import 'leaflet.markercluster';
+import { Component, AfterViewInit, Output, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { DataService } from 'src/app/data.service';
+import * as L from 'leaflet';
+import 'leaflet.markercluster';
 import {
   iconBlue,
   iconYellow,
@@ -15,20 +15,18 @@ import {
   styleUrls: ['./main-map.css'],
 })
 export class MainMap implements AfterViewInit {
-  stations: any[] = [];
+  @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Output() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
-  @Output() $lastUpdatedTime: BehaviorSubject<string> = new BehaviorSubject('');
   selectedMarker: any;
+  markers: any;
   private map: any;
 
   constructor(private dataService: DataService) {}
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.dataService.sendGetRequest().subscribe((data) => {
-      this.stations = data;
-      this.$lastUpdatedTime.next(data[0].last_updated);
-      this.addMarkers(data);
+    this.$stations.subscribe(() => {
+      this.refreshData();
     });
   }
 
@@ -49,8 +47,17 @@ export class MainMap implements AfterViewInit {
     ).addTo(this.map);
   }
 
+  refreshData(): void {
+    if (this.markers) this.clearMap();
+    this.addMarkers(this.$stations.getValue());
+  }
+
+  clearMap(): void {
+    this.markers.clearLayers();
+  }
+
   addMarkers(stations: any[]): void {
-    const markers = L.markerClusterGroup({
+    this.markers = L.markerClusterGroup({
       spiderfyOnMaxZoom: false,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: false,
@@ -66,9 +73,9 @@ export class MainMap implements AfterViewInit {
         this.manageSelectedMarker(station, event.target);
       });
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
-      markers.addLayer(marker);
+      this.markers.addLayer(marker);
     }
-    this.map.addLayer(markers);
+    this.map.addLayer(this.markers);
   }
 
   manageSelectedMarker(station: any, newSelectedMarker: any) {
