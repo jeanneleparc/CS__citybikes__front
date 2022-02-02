@@ -84,8 +84,8 @@ export class BarChart implements OnInit {
                 borderColorTab.push('#ffa05b');
                 return;
               }
-              backgroundColorTab.push('#f5812c');
-              borderColorTab.push('#f5812c');
+              backgroundColorTab.push('#ff6b00');
+              borderColorTab.push('#ff6b00');
             }
           );
           this.barChartData = [
