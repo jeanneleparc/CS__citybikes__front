@@ -67,3 +67,11 @@ footer {
 .button-container {
   width: 80px;
 }
+
+.tab {
+  cursor: pointer;
+}
+
+.active {
+  background-color: rgba(255, 255, 255, .25);;
+}

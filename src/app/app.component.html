@@ -6,9 +6,12 @@
       alt="Bike"
       src="favicon.ico"
     />
-    <span>NYC Citibikes</span>
+    <span *ngFor="let tab of tabs"
+          [class.active]="currentTab == tab.name"
+          class="p-2 tab"
+          (click)="changeTab(tab.name)">{{ tab.title }}</span>
   </div>
-  <div class="upper-right-corner">
+  <div *ngIf="currentTab == 'main'" class="upper-right-corner">
     <div class="spinner-container">
       <p *ngIf="lastUpdatedTime != ''; else spinner" class="last-updated-date">Last updated at {{ lastUpdatedTime }}</p>
     </div>
@@ -19,9 +22,14 @@
 </div>
 
 <div class="main">
-  <div *ngIf="(currentTab$ | async) as currentTab">
-    <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
-    <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
+  <div [ngSwitch]="currentTab">
+    <div *ngSwitchCase="'main'">
+      <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
+      <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
+    </div>
+    <div *ngSwitchCase="'stats'">
+      Hello
+    </div>
   </div>
   
   <!-- Footer -->
