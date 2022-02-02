@@ -19,8 +19,10 @@
 </div>
 
 <div class="main">
-  <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
-  <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
+  <div *ngIf="(currentTab$ | async) as currentTab">
+    <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
+    <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
+  </div>
   
   <!-- Footer -->
   <footer>

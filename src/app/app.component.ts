@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   lastUpdatedTime: string = '';
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   loading: boolean = false;
+  currentTab$: BehaviorSubject<string> = new BehaviorSubject('main');
 
   constructor(private dataService: DataService) {}
 
