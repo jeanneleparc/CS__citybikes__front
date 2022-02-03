@@ -8,14 +8,15 @@
       <button type="button" class="btn btn-default" (click)="goToNextDay()">
         <i class="fas fa-angle-right"></i>
       </button>
-    </div>    
-      <canvas baseChart 
-        [datasets]="barChartData"
-        [labels]="barChartLabels"
-        [options]="barChartOptions"
-        [plugins]="barChartPlugins"
-        [legend]="barChartLegend"
-        [chartType]="barChartType">
-      </canvas>
-    </div>
+    </div>  
+    <div class="div-title-chart"><p class='title-chart'>Average Filling Rate By Time Slot</p></div>
+    <canvas baseChart 
+      [datasets]="barChartData"
+      [labels]="barChartLabels"
+      [options]="barChartOptions"
+      [plugins]="barChartPlugins"
+      [legend]="barChartLegend"
+      [chartType]="barChartType">
+    </canvas>
+  </div>
 </div>

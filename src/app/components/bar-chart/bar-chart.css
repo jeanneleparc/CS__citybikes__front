@@ -13,3 +13,13 @@ p {
   width: 100%;
   height: 50px;
 }
+
+.title-chart{
+  white-space:nowrap;
+  width: auto;
+  font-size: 12px;
+}
+
+.div-title-chart{
+  float: right;
+}

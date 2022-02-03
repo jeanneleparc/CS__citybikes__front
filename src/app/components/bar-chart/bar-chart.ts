@@ -5,6 +5,7 @@ import * as moment from 'moment-timezone';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import * as _ from 'lodash';
+import { endsWith } from 'lodash';
 
 export interface IStatsAvgFillingRate {
   timeSlot: number;
@@ -49,6 +50,15 @@ export class BarChart implements OnInit {
           },
         },
       ],
+    },
+    tooltips: {
+      callbacks: {
+        label: function (tooltipItem) {
+          var label = tooltipItem.yLabel + ' %';
+          return label;
+        },
+      },
+      displayColors: false,
     },
   };
   public barChartLabels: Label[] = [];
@@ -96,8 +106,8 @@ export class BarChart implements OnInit {
               label: 'Average Filling Rate',
               backgroundColor: backgroundColorTab,
               borderColor: borderColorTab,
-              hoverBackgroundColor: '#f2cd5d',
-              hoverBorderColor: '#f2cd5d',
+              hoverBackgroundColor: '#247dce',
+              hoverBorderColor: '#247dce',
             },
           ];
         });
