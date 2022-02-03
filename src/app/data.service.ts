@@ -10,12 +10,12 @@ export class DataService {
   constructor(private httpClient: HttpClient) {}
 
   public sendGetStatusRequest() {
-    return this.httpClient.get<any>(this.REST_API_SERVER + '/station_status');
+    return this.httpClient.get<any>(`${this.REST_API_SERVER}/station_status`);
   }
 
   public sendGetAvgFillingRateByIdByDayRequest(idStation: Number, day: String) {
     return this.httpClient.get<any>(
-      this.REST_API_SERVER + '/stats_avg_filling_rate/' + idStation + '/' + day
+      `${this.REST_API_SERVER}/stats_avg_filling_rate/${idStation}/${day}`
     );
   }
 }
