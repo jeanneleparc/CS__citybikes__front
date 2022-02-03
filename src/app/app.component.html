@@ -28,7 +28,9 @@
       <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
     </div>
     <div *ngSwitchCase="'stats'">
-      Hello
+      <select-scroll [values]="days" (selectedValuesId$)="changeSelectedDay($event)"></select-scroll>
+      <select-scroll [values]="timeslots" (selectedValuesId$)="changeSelectedTimeSlot($event)"></select-scroll>
+      <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
     </div>
   </div>
   

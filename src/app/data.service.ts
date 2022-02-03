@@ -22,4 +22,9 @@ export class DataService {
       { id: idStation, weekDay: day }
     );
   }
+
+  public getStatsAvgFillingRateByTimeslot(timeslot: number, day: string) {
+    return this.httpClient.get<any>(
+      `${this.REST_API_SERVER}/stats_avg_filling_rate_by_timeslot/${timeslot}/${day}`);
+    }
 }
