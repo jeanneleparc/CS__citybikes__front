@@ -13,6 +13,17 @@ export class AppComponent implements OnInit {
   lastUpdatedTime: string = '';
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   loading: boolean = false;
+  tabs: any[] = [
+    {
+      name: 'main',
+      title: 'NYC Citibikes',
+    },
+    {
+      name: 'stats',
+      title: 'Statistics',
+    },
+  ];
+  currentTab: string = 'main';
 
   constructor(private dataService: DataService) {}
 
@@ -55,5 +66,9 @@ export class AppComponent implements OnInit {
 
   changeSelectedStation(newSelectedStation: any) {
     this.$selectedStation.next(newSelectedStation);
+  }
+
+  changeTab(tab: string) {
+    this.currentTab = tab;
   }
 }
