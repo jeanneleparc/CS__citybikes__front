@@ -3,7 +3,7 @@ FROM nginx:1.21.3-alpine
 # nginx congiguration to redirect every route to /index.html
 RUN echo $'\n\
 server {\n\
-  listen       80;\n\
+  listen       4200;\n\
   server_name  localhost;\n\
   root /usr/share/nginx/html;\n\
   try_files $uri $uri/ /index.html;\n\
@@ -28,6 +28,6 @@ WORKDIR /usr/share/nginx/html
 
 COPY /dist/app-front .
 
-EXPOSE 80
+EXPOSE 4200
 
 CMD ["nginx", "-g", "daemon off;"]
