@@ -1,23 +1,33 @@
-# Create image based on the official Node 10 image from dockerhub
-FROM node:14
+FROM nginx:1.21.3-alpine
 
-# Create a directory where our app will be placed
-RUN mkdir -p /app
+# nginx congiguration to redirect every route to /index.html
+RUN echo $'\n\
+server {\n\
+  listen       80;\n\
+  server_name  localhost;\n\
+  root /usr/share/nginx/html;\n\
+  try_files $uri $uri/ /index.html;\n\
+  # GZIP\n\
+  gzip on;\n\
+  gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript image/x-icon application/vnd.ms-fontobject font/opentype application/x-font-ttf;\n\
+  # Media: images, icons, video, audio, HTC\n\
+  location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {\n\
+    expires 1M;\n\
+    access_log off;\n\
+    add_header Cache-Control "public";\n\
+  }\n\
+  # CSS and Javascript\n\
+  location ~* \.(?:css|js)$ {\n\
+    expires 1y;\n\
+    access_log off;\n\
+    add_header Cache-Control "public";\n\
+  }\n\
+}' > /etc/nginx/conf.d/default.conf
 
-# Change directory so that our commands run inside this new directory
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
 
-# Copy dependency definitions
-COPY package*.json /app/
+COPY /dist/app-front .
 
-# Install dependencies
-RUN npm install
+EXPOSE 80
 
-# Get all the code needed to run the app
-COPY . /app/
-
-# Expose the port the app runs in
-EXPOSE 4200
-
-# Serve the app
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
