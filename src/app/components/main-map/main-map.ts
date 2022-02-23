@@ -69,6 +69,11 @@ export class MainMap implements AfterViewInit {
       if (!this.stationIsActive(station)) {
         marker = L.marker([latitude, longitude], { icon: iconRed });
       }
+      // manage the selected station
+      if (this.$selectedStation.value?.id == station.id) {
+        marker = L.marker([latitude, longitude], { icon: iconYellow });
+        this.selectedMarker = marker;
+      }
       marker.on('click', (event) => {
         this.manageSelectedMarker(station, event.target);
       });
