@@ -10,8 +10,14 @@ import { ChartsModule } from 'ng2-charts';
 import { SelectScrollComponent } from 'src/app/components/select-scroll/select-scroll.component';
 
 @NgModule({
-  declarations: [AppComponent, MainMap, MainSidePanel, BarChart],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ChartsModule, SelectScrollComponent],
+  declarations: [
+    AppComponent,
+    MainMap,
+    MainSidePanel,
+    BarChart,
+    SelectScrollComponent,
+  ],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ChartsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

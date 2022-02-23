@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
     this.currentTab = tab;
   }
 
-  refreshData(): void {
+  refreshDataMain(): void {
     this.dataService.sendGetStatusRequest().subscribe((data) => {
       this.$stations.next(data);
       this.setUpLastUpdatedTime(data[0].last_updated);
