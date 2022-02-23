@@ -65,6 +65,9 @@ export class BarChart implements OnInit {
   public barChartLegend = false;
   public barChartPlugins = [];
   public barChartData: ChartDataSets[] = [];
+  public colorDarkOrange: string = '#ff6b00';
+  public colorOrange: string = '#ffa05b';
+  public colorBlue: string = '#247dce';
 
   constructor(private dataService: DataService) {}
 
@@ -93,12 +96,12 @@ export class BarChart implements OnInit {
               Math.round(element.avgFillingRate * 100)
             );
             if (element.timeSlot !== this.hour) {
-              backgroundColorTab.push('#ffa05b');
-              borderColorTab.push('#ffa05b');
+              backgroundColorTab.push(this.colorOrange);
+              borderColorTab.push(this.colorOrange);
               return;
             }
-            backgroundColorTab.push('#ff6b00');
-            borderColorTab.push('#ff6b00');
+            backgroundColorTab.push(this.colorDarkOrange);
+            borderColorTab.push(this.colorDarkOrange);
           });
           this.barChartData = [
             {
@@ -106,8 +109,8 @@ export class BarChart implements OnInit {
               label: 'Average Filling Rate',
               backgroundColor: backgroundColorTab,
               borderColor: borderColorTab,
-              hoverBackgroundColor: '#247dce',
-              hoverBorderColor: '#247dce',
+              hoverBackgroundColor: this.colorBlue,
+              hoverBorderColor: this.colorBlue,
             },
           ];
         });
