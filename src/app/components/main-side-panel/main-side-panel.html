@@ -6,19 +6,29 @@
     </div>
   </div>
   <div *ngIf="!loading; else spinner" class="sidepannel-container">
-    <div class="text-with-icon">
-      <div class="icon">
-        <i class="fas fa-bicycle fa-2x"></i>
+    <div *ngIf="isStationActive(prevSelectedStation); else inactiveStationcontainer" class="active-station-container">
+      <div class="text-with-icon">
+        <div class="icon">
+          <i class="fas fa-bicycle fa-2x"></i>
+        </div>
+        <p>{{ prevSelectedStation.num_bikes_available }} available bikes</p>
       </div>
-      <p>{{ prevSelectedStation.num_bikes_available }} available bikes</p>
-    </div>
-    <div class="text-with-icon">
-      <div class="icon">
-        <i class="fas fa-parking fa-2x"></i>
+      <div class="text-with-icon">
+        <div class="icon">
+          <i class="fas fa-parking fa-2x"></i>
+        </div>
+        <p>{{ prevSelectedStation.num_docks_available }} available docks</p>
       </div>
-      <p>{{ prevSelectedStation.num_docks_available }} available docks</p>
+      <bar-chart [$selectedStation]="$selectedStation"></bar-chart>
     </div>
-    <bar-chart [$selectedStation]="$selectedStation"></bar-chart>
+    <ng-template #inactiveStationcontainer>
+      <div class="text-with-icon">
+        <div class="icon">
+          <i class="fas fa-times-circle fa-2x"></i>
+        </div>
+        <p>Disabled station</p>
+      </div>
+    </ng-template>
   </div>
 </div>
 

@@ -65,6 +65,10 @@
   justify-content: center;
 }
 
+.fa-times-circle {
+  color: #f26157;
+}
+
 .spinner-container {
   display: flex;
   align-items: center;
