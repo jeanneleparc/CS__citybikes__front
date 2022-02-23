@@ -79,7 +79,7 @@ export class BarChart implements OnInit {
       }
       this.idStation = selectedStation.id;
       this.dataService
-        .sendGetAvgFillingRateByIdByDayRequest(this.idStation, this.day)
+        .sendPostAvgFillingRateByIdByDayRequest(this.idStation, this.day)
         .subscribe((data) => {
           this.statsAvgFillingRate = data;
           this.barChartLabels = data.map((element: IStatsAvgFillingRate) =>
@@ -119,7 +119,7 @@ export class BarChart implements OnInit {
     this.day = this.date.clone().format('dddd');
     this.hour = parseInt(this.date.clone().format('HH'), 10);
     this.dataService
-      .sendGetAvgFillingRateByIdByDayRequest(this.idStation, this.day)
+      .sendPostAvgFillingRateByIdByDayRequest(this.idStation, this.day)
       .subscribe((dataCall) => {
         this.statsAvgFillingRate = dataCall;
         const avgFillingRatePercent = dataCall.map(
@@ -136,7 +136,7 @@ export class BarChart implements OnInit {
     this.day = this.date.clone().format('dddd');
     this.hour = parseInt(this.date.clone().format('HH'), 10);
     this.dataService
-      .sendGetAvgFillingRateByIdByDayRequest(this.idStation, this.day)
+      .sendPostAvgFillingRateByIdByDayRequest(this.idStation, this.day)
       .subscribe((dataCall) => {
         this.statsAvgFillingRate = dataCall;
         const avgFillingRatePercent = dataCall.map(

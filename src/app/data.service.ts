@@ -13,9 +13,13 @@ export class DataService {
     return this.httpClient.get<any>(`${this.REST_API_SERVER}/station_status`);
   }
 
-  public sendGetAvgFillingRateByIdByDayRequest(idStation: Number, day: String) {
-    return this.httpClient.get<any>(
-      `${this.REST_API_SERVER}/stats_avg_filling_rate/${idStation}/${day}`
+  public sendPostAvgFillingRateByIdByDayRequest(
+    idStation: Number,
+    day: String
+  ) {
+    return this.httpClient.post<any>(
+      `${this.REST_API_SERVER}/stats_avg_filling_rate_by_station`,
+      { id: idStation, weekDay: day }
     );
   }
 }
