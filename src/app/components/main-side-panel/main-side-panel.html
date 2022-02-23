@@ -19,6 +19,7 @@
         </div>
         <p>{{ prevSelectedStation.num_docks_available }} available docks</p>
       </div>
+      <bar-chart [$selectedStation]="$selectedStation"></bar-chart>
     </div>
     <ng-template #inactiveStationcontainer>
       <div class="text-with-icon">

@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   refreshData(): void {
-    this.dataService.sendGetRequest().subscribe((data) => {
+    this.dataService.sendGetStatusRequest().subscribe((data) => {
       this.$stations.next(data);
       this.setUpLastUpdatedTime(data[0].last_updated);
       if (this.$selectedStation.getValue()) {
