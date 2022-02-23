@@ -5,7 +5,6 @@ import * as moment from 'moment-timezone';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import * as _ from 'lodash';
-import { endsWith } from 'lodash';
 
 export interface IStatsAvgFillingRate {
   timeSlot: number;
@@ -82,16 +81,17 @@ export class BarChart implements OnInit {
         .sendPostAvgFillingRateByIdByDayRequest(this.idStation, this.day)
         .subscribe((data) => {
           this.statsAvgFillingRate = data;
-          this.barChartLabels = data.map((element: IStatsAvgFillingRate) =>
-            moment.utc(element.timeSlot * 3600 * 1000).format('hh a')
-          );
-          const avgFillingRatePercent = data.map(
-            (element: IStatsAvgFillingRate) =>
-              Math.round(element.avgFillingRate * 100)
-          );
           const backgroundColorTab: string[] = [];
           const borderColorTab: string[] = [];
+          const avgFillingRatePercent: number[] = [];
+          this.barChartLabels = [];
           data.forEach((element: IStatsAvgFillingRate) => {
+            this.barChartLabels.push(
+              moment.utc(element.timeSlot * 3600 * 1000).format('hh a')
+            );
+            avgFillingRatePercent.push(
+              Math.round(element.avgFillingRate * 100)
+            );
             if (element.timeSlot !== this.hour) {
               backgroundColorTab.push('#ffa05b');
               borderColorTab.push('#ffa05b');
@@ -114,10 +114,9 @@ export class BarChart implements OnInit {
     });
   }
 
-  goToPreviousDay(): void {
-    this.date = this.date.subtract(1, 'day');
-    this.day = this.date.clone().format('dddd');
-    this.hour = parseInt(this.date.clone().format('HH'), 10);
+  updateDataBarChart(newDate: moment.Moment): void {
+    this.day = newDate.clone().format('dddd');
+    this.hour = parseInt(newDate.clone().format('HH'), 10);
     this.dataService
       .sendPostAvgFillingRateByIdByDayRequest(this.idStation, this.day)
       .subscribe((dataCall) => {
@@ -131,20 +130,13 @@ export class BarChart implements OnInit {
       });
   }
 
+  goToPreviousDay(): void {
+    this.date = this.date.subtract(1, 'day');
+    this.updateDataBarChart(this.date);
+  }
+
   goToNextDay(): void {
     this.date = this.date.add(1, 'day');
-    this.day = this.date.clone().format('dddd');
-    this.hour = parseInt(this.date.clone().format('HH'), 10);
-    this.dataService
-      .sendPostAvgFillingRateByIdByDayRequest(this.idStation, this.day)
-      .subscribe((dataCall) => {
-        this.statsAvgFillingRate = dataCall;
-        const avgFillingRatePercent = dataCall.map(
-          (element: IStatsAvgFillingRate) =>
-            Math.round(element.avgFillingRate * 100)
-        );
-
-        this.barChartData[0].data = avgFillingRatePercent;
-      });
+    this.updateDataBarChart(this.date);
   }
 }
