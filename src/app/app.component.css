@@ -85,6 +85,7 @@ footer {
   z-index: 10000;
   border-radius: 25px;
   width: 250px;
+  box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.26);
 }
 
 .weekday-scroll {
