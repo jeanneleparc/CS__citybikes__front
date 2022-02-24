@@ -11,3 +11,16 @@
   height: calc(100vh - 80px);
   width: 100%;
 }
+
+.test {
+	background-color:#247dce; 
+    width:10px; 
+    height: 10px;
+    display: block;
+    left:10px;
+    top: 10px;
+    position: relative;
+    border-radius:10px 10px 0;
+    transform: rotate(45deg);
+    border: 10px solid #FFFFFF;
+}

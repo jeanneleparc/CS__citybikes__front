@@ -7,6 +7,7 @@ import {
   iconBlue,
   iconYellow,
   iconRed,
+  iconBlueCluster,
 } from 'src/app/components/main-map/icons';
 
 @Component({
@@ -62,6 +63,14 @@ export class MainMap implements AfterViewInit {
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
       maxClusterRadius: 50,
+      iconCreateFunction() {
+        const icon = L.divIcon({
+          iconAnchor: [2, 10 * 2 + 2 * 2],
+          popupAnchor: [0, -(10 * 3 + 2)],
+          html: '<div>Hello</div>',
+        });
+        return iconBlueCluster;
+      },
     });
     for (const station of stations) {
       const { latitude, longitude } = station;
