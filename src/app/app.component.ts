@@ -30,13 +30,20 @@ export class AppComponent implements OnInit {
   selectedDay$: BehaviorSubject<string> = new BehaviorSubject('Monday');
   selectedTimeSlot$: BehaviorSubject<number> = new BehaviorSubject(0);
   days: string[] = [...Array(7).keys()].map((i) =>
-    moment().add(i, 'days').format('dddd')
+    moment().startOf('weeks').add(i, 'days').format('dddd')
   );
   timeslots: string[] = [...Array(24).keys()].map(
     (i) =>
-      `${moment().add(i, 'hours').format('hh a')} - ${moment()
+      `${moment().startOf('day').add(i, 'hours').format('hh a')} - ${moment()
+        .startOf('day')
         .add(i + 1, 'hours')
         .format('hh a')}`
+  );
+
+  currentDayNumber: number = moment().tz('America/New_York').day();
+  currentTimeslotNumber: number = parseInt(
+    moment().tz('America/New_York').format('HH'),
+    10
   );
 
   constructor(private dataService: DataService) {}
@@ -93,7 +100,10 @@ export class AppComponent implements OnInit {
     combineLatest([this.selectedTimeSlot$, this.selectedDay$])
       .pipe(
         switchMap(([timeslot, day]) =>
-          this.dataService.getStatsAvgFillingRateByTimeslot(timeslot, day)
+          this.dataService.sendPostAvgFillingRateByTimeslotByDayRequest(
+            timeslot,
+            day
+          )
         )
       )
       .subscribe((result) => {

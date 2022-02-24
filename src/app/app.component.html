@@ -30,10 +30,10 @@
     <div *ngSwitchCase="'stats'">
       <div class="d-flex justify-content-around timeslot-weekday-scroll">
         <div class="d-flex justify-content-around weekday-scroll">
-          <select-scroll [values]="days" (selectedValuesId$)="changeSelectedDay($event)"></select-scroll>
+          <select-scroll [values]="days" [startValueId]="currentDayNumber" (selectedValuesId$)="changeSelectedDay($event)"></select-scroll>
         </div>
         <div class="d-flex justify-content-around timeslot-scroll">
-          <select-scroll [values]="timeslots" (selectedValuesId$)="changeSelectedTimeSlot($event)"></select-scroll>
+          <select-scroll [values]="timeslots" [startValueId]="currentTimeslotNumber" (selectedValuesId$)="changeSelectedTimeSlot($event)"></select-scroll>
         </div>
       </div>
       <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>

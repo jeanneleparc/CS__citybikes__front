@@ -23,9 +23,13 @@ export class DataService {
     );
   }
 
-  public getStatsAvgFillingRateByTimeslot(timeslot: number, day: string) {
-    return this.httpClient.get<any>(
-      `${this.REST_API_SERVER}/stats_avg_filling_rate_by_timeslot/${timeslot}/${day}`
+  public sendPostAvgFillingRateByTimeslotByDayRequest(
+    timeSlot: Number,
+    day: String
+  ) {
+    return this.httpClient.post<any>(
+      `${this.REST_API_SERVER}/stats_avg_filling_rate_by_timeslot`,
+      { weekDay: day, timeSlot: timeSlot }
     );
   }
 }

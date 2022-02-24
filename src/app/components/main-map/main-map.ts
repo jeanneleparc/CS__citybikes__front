@@ -60,7 +60,7 @@ export class MainMap implements AfterViewInit {
     this.markers = L.markerClusterGroup({
       spiderfyOnMaxZoom: false,
       showCoverageOnHover: false,
-      zoomToBoundsOnClick: false,
+      zoomToBoundsOnClick: true,
       maxClusterRadius: 50,
     });
     for (const station of stations) {
