@@ -21,9 +21,15 @@ export class AppComponent implements OnInit {
       name: 'main',
       title: 'Home',
     },
+  ];
+  statsTabs: any[] = [
     {
-      name: 'stats',
-      title: 'Statistics',
+      name: 'stats-map',
+      title: 'Repartition of the bikes',
+    },
+    {
+      name: 'stats-ranking',
+      title: 'Ranking of the stations',
     },
   ];
   currentTab: string = 'main';

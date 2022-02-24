@@ -8,6 +8,7 @@ import { MainSidePanel } from 'src/app/components/main-side-panel/main-side-pane
 import { BarChart } from 'src/app/components/bar-chart/bar-chart';
 import { ChartsModule } from 'ng2-charts';
 import { SelectScrollComponent } from 'src/app/components/select-scroll/select-scroll.component';
+import { StatsRanking } from './components/stats-ranking/stats-ranking';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SelectScrollComponent } from 'src/app/components/select-scroll/select-s
     MainSidePanel,
     BarChart,
     SelectScrollComponent,
+    StatsRanking,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ChartsModule],
   providers: [],

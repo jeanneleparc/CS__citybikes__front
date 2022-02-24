@@ -10,6 +10,14 @@
       <li *ngFor="let tab of tabs" class="nav-item" [class.active]="currentTab == tab.name">
         <span class="nav-link" (click)="changeTab(tab.name)">{{ tab.title }}</span>
       </li>
+      <li class="nav-item">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Statistics
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li *ngFor="let tab of statsTabs"><a class="dropdown-item" (click)="changeTab(tab.name)">{{ tab.title }}</a></li>
+        </ul>
+      </li>
     </ul>
     <div *ngIf="currentTab == 'main'" class="d-flex justify-content-start align-items-center">
       <span class="align-middle" *ngIf="($lastUpdatedTime | async); else spinner" class="text-white">Last updated at {{ $lastUpdatedTime | async }}</span>
@@ -24,7 +32,8 @@
       <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>
       <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
     </div>
-    <div *ngSwitchCase="'stats'">
+
+    <div *ngSwitchCase="'stats-map'">
       <div class="d-flex justify-content-around timeslot-weekday-scroll">
         <div class="d-flex justify-content-around weekday-scroll">
           <select-scroll [values]="days" [startValueId]="currentDayNumber" ($selectedValuesId)="changeSelectedDay($event)"></select-scroll>
@@ -34,6 +43,9 @@
         </div>
       </div>
       <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>
+    </div>
+    <div *ngSwitchCase="'stats-ranking'">
+      <stats-ranking></stats-ranking>
     </div>
   </div>
   
