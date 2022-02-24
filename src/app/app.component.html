@@ -18,7 +18,7 @@
   </div>
 </nav>
 
-<div class="main">
+<div class="main position-relative">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
       <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
