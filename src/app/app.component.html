@@ -1,27 +1,24 @@
 <!-- Toolbar -->
-<div class="toolbar" role="banner">
-  <div class="upper-left-corner">
-    <img
-      width="40"
-      alt="Bike"
-      src="favicon.ico"
-    />
-    <span *ngFor="let tab of tabs"
-          [class.active]="currentTab == tab.name"
-          class="p-2 tab"
-          (click)="changeTab(tab.name)">{{ tab.title }}</span>
-  </div>
-  <div *ngIf="currentTab == 'main'" class="upper-right-corner">
-    <div class="spinner-container">
-      <p *ngIf="lastUpdatedTime != ''; else spinner" class="last-updated-date">Last updated at {{ lastUpdatedTime }}</p>
-    </div>
-      <div class="spinner-container button-container">
-      <button *ngIf="!loading; else spinner" class="btn btn-outline-light btn-refresh" (click)="triggerRefresh()">Refresh</button>
-    </div>
-  </div>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <span class="navbar-brand" (click)="changeTab('main')">NYC Citibikes</span>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-<div class="main">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li *ngFor="let tab of tabs" class="nav-item" [class.active]="currentTab == tab.name">
+        <span class="nav-link" (click)="changeTab(tab.name)">{{ tab.title }}</span>
+      </li>
+    </ul>
+    <div *ngIf="currentTab == 'main'" class="d-flex justify-content-start align-items-center">
+      <span class="align-middle" *ngIf="(lastUpdatedTime$ | async); else spinner" class="text-white">Last updated at {{ lastUpdatedTime$ | async }}</span>
+      <button *ngIf="!loading; else spinner" class="btn btn-outline-light btn-refresh mx-2" (click)="triggerRefresh()">Refresh</button>
+    </div>
+  </div>
+</nav>
+
+<div class="main position-relative">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
       <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>

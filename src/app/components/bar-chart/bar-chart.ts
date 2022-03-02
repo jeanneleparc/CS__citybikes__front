@@ -69,6 +69,8 @@ export class BarChart implements OnInit {
   public colorOrange: string = '#ffa05b';
   public colorBlue: string = '#247dce';
 
+  public loading$ = new BehaviorSubject<boolean>(false);
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -79,6 +81,7 @@ export class BarChart implements OnInit {
       if (_.isNil(selectedStation) || _.isEmpty(selectedStation)) {
         return;
       }
+      this.loading$.next(true);
       this.idStation = selectedStation.id;
       this.dataService
         .sendPostAvgFillingRateByIdByDayRequest(this.idStation, this.day)
@@ -113,6 +116,7 @@ export class BarChart implements OnInit {
               hoverBorderColor: this.colorBlue,
             },
           ];
+          this.loading$.next(false);
         });
     });
   }

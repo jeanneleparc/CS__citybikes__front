@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment-timezone';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DataService } from './data.service';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -14,12 +15,13 @@ export class AppComponent implements OnInit {
   $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
   $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
   lastUpdatedTime: string = '';
+  lastUpdatedTime$: BehaviorSubject<string> = new BehaviorSubject('');
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   loading: boolean = false;
   tabs: any[] = [
     {
       name: 'main',
-      title: 'NYC Citibikes',
+      title: 'Home',
     },
     {
       name: 'stats',
@@ -51,7 +53,7 @@ export class AppComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.refreshDataMain();
+    this.autoRefreshData();
     this.refreshDataStatistics();
   }
 
@@ -65,7 +67,19 @@ export class AppComponent implements OnInit {
     }
   }
 
-  refreshDataMain(): void {
+  autoRefreshData(): void {
+    timer(0, 1 * 60 * 1000) //  refresh automatically every minute
+      .pipe(mergeMap(() => this.dataService.sendGetStatusRequest()))
+      .subscribe((data) => {
+        this.$stations.next(data);
+        this.setUpLastUpdatedTime(data[0].last_updated);
+        if (this.$selectedStation.getValue()) {
+          this.refreshSelectedStation(data, this.$selectedStation.getValue());
+        }
+      });
+  }
+
+  forceRefreshData(): void {
     this.dataService.sendGetStatusRequest().subscribe((data) => {
       this.$stations.next(data);
       this.setUpLastUpdatedTime(data[0].last_updated);
@@ -80,9 +94,11 @@ export class AppComponent implements OnInit {
     if (brutLastUpdatedTime != '') {
       const lastUpdatedDate =
         moment(brutLastUpdatedTime).tz('America/New_York');
-      this.lastUpdatedTime = `${lastUpdatedDate.format(
-        'hh:mm a'
-      )} on ${lastUpdatedDate.format('YYYY-MM-DD')} EST`;
+      this.lastUpdatedTime$.next(
+        `${lastUpdatedDate.format('hh:mm a')} on ${lastUpdatedDate.format(
+          'YYYY-MM-DD'
+        )} EST`
+      );
     }
   }
 
@@ -94,7 +110,7 @@ export class AppComponent implements OnInit {
   }
 
   triggerRefresh() {
-    this.refreshDataMain();
+    this.forceRefreshData();
     this.loading = true;
   }
 

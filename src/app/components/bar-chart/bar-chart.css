@@ -23,3 +23,7 @@ p {
 .div-title-chart{
   float: right;
 }
+
+.spinner-border{
+  color: #ffa05b;
+}
