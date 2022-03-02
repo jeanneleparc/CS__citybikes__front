@@ -7,6 +7,10 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.navbar {
+  background-color: #247DCE;
+}
+
 .main {
   display: flex;
   flex-direction: column;  
