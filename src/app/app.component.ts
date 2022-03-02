@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   tabs: any[] = [
     {
       name: 'main',
-      title: 'NYC Citibikes',
+      title: 'Home',
     },
     {
       name: 'stats',

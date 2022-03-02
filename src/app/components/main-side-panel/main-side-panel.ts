@@ -41,7 +41,7 @@ export class MainSidePanel implements OnInit {
   }
 
   openSidePanel() {
-    this.sidePanel.style.width = '25%';
+    this.sidePanel.style.width = window.screen.width >= 1024 ? '25%' : '100%';
     this.sidePanelIsOpen = true;
   }
 
