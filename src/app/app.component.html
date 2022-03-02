@@ -12,7 +12,7 @@
       </li>
     </ul>
     <div *ngIf="currentTab == 'main'" class="d-flex justify-content-start align-items-center">
-      <span class="align-middle" *ngIf="lastUpdatedTime != ''; else spinner" class="text-white">Last updated at {{ lastUpdatedTime }}</span>
+      <span class="align-middle" *ngIf="(lastUpdatedTime$ | async); else spinner" class="text-white">Last updated at {{ lastUpdatedTime$ | async }}</span>
       <button *ngIf="!loading; else spinner" class="btn btn-outline-light btn-refresh mx-2" (click)="triggerRefresh()">Refresh</button>
     </div>
   </div>
