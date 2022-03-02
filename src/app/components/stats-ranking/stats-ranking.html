@@ -6,10 +6,11 @@
         <th scope="col">Filling rate</th>
       </tr>
     </thead>
-    <!-- <tbody>
-      <tr *ngFor="let station of data?.data?.stations">
-        <th>{{ station.station_id }}</th>
-        <td>{{ station.station_status }}</td>
+    <tbody>
+      <tr *ngFor="let station of topStations; let index = index;">
+        <th>{{ index+1 }}</th>
+        <th>{{ station.stationName }}</th>
+        <td>{{ station.fillingRate }} %</td>
       </tr>
-    </tbody> -->
+    </tbody>
   </table>

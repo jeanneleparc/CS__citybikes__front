@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/data.service';
 
 @Component({
   selector: 'stats-ranking',
@@ -6,7 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./stats-ranking.css'],
 })
 export class StatsRanking implements OnInit {
-  constructor() {}
+  topStations: any[] = [];
 
-  ngOnInit(): void {}
+  constructor(private dataService: DataService) {}
+
+  ngOnInit(): void {
+    this.dataService
+      .sendPostRankingStationRequest(8, 'wednesday')
+      .subscribe((data) => {
+        console.log(data);
+        this.topStations = data;
+      });
+  }
 }
