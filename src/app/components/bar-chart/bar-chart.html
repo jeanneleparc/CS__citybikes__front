@@ -1,4 +1,4 @@
-<div id="myBarChart">
+<div *ngIf="!(loading$ | async); else spinner" id="myBarChart">
   <div style="display: block;">
     <div class="d-flex justify-content-around day-of-the-week">
       <button type="button" class="btn btn-default" (click)="goToPreviousDay()">
@@ -20,3 +20,11 @@
     </canvas>
   </div>
 </div>
+
+<ng-template #spinner>
+  <div class="spinner-container text-center mt-2">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>
