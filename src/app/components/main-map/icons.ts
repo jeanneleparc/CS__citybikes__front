@@ -35,20 +35,21 @@ function createColoredMarker(color: string, isCluster: boolean): any {
 function getColoredMarkerStatistics(
   color: string,
   borderColor: string,
-  fillingRate: number
+  fillingRate: number,
+  isShifted: boolean
 ): string {
   return `\
     width: ${size * 3}px; \
     height: ${size * 3}px; \
     display: block; \
-    left: ${size * -1.5}px; \
-    top: ${size * -1.5}px; \
+    left: ${!isShifted ? size * -1.5 : -1}px; \
+    top: ${!isShifted ? size * -1.5 : 3}px; \
     position: relative; \
     border-radius: ${size * 3}px ${size * 3}px 0;  \
     background: linear-gradient(315deg, ${color} 0%, ${color} ${
     fillingRate * 100
   }%,#FFFFFF ${fillingRate * 100 + 1}%, #FFFFFF 100%);\
-    transform: rotate(45deg); \
+    ${!isShifted ? `transform: rotate(45deg);` : ``} \
     box-shadow : 5px 4px 5px 0px rgba(55,55,55,0.3); \
     border: ${border}px solid ${borderColor};`;
 }
@@ -56,14 +57,15 @@ function getColoredMarkerStatistics(
 export function createColoredMarkerStatistics(
   color: string,
   borderColor: string,
-  fillingRate: any
+  fillingRate: any,
+  isCluster: boolean
 ): any {
   return L.divIcon({
     className: `color-pin-${color}`,
     iconAnchor: [border, size * 2 + border * 2],
     popupAnchor: [0, -(size * 3 + border)],
     // eslint-disable-next-line prettier/prettier
-    html: `<span style="${getColoredMarkerStatistics(color, borderColor, fillingRate)}"></span>`
+    html: `<span style="${getColoredMarkerStatistics(color, borderColor, fillingRate, false)}">${isCluster ? `<span style="${getColoredMarkerStatistics(color, borderColor, fillingRate, true)}"></span>`:``} </span>`
   });
 }
 

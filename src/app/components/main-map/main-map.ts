@@ -1,6 +1,5 @@
 import { Component, AfterViewInit, Output, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { DataService } from 'src/app/data.service';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import {
@@ -10,6 +9,34 @@ import {
   iconBlueCluster,
   createColoredMarkerStatistics,
 } from 'src/app/components/main-map/icons';
+
+const markerColors = {
+  red: '#cd2d2d',
+  borderRed: '#a82323',
+  yellow: '#f2d164',
+  borderYellow: '#e0b62b',
+  green: '#0e8c38',
+  borderGreen: '#0a6b2a',
+};
+const determineColorAccordingToFillingRate = (
+  fillingRate: any
+): { color: string; borderColor: string } => {
+  if (fillingRate !== undefined && fillingRate < 0.2) {
+    return { color: markerColors.red, borderColor: markerColors.borderRed };
+  } else if (
+    fillingRate !== undefined &&
+    fillingRate >= 0.2 &&
+    fillingRate < 0.55
+  ) {
+    return {
+      color: markerColors.yellow,
+      borderColor: markerColors.borderYellow,
+    };
+  } else if (fillingRate !== undefined && fillingRate >= 0.55) {
+    return { color: markerColors.green, borderColor: markerColors.borderGreen };
+  }
+  return { color: '#FFFFFF', borderColor: '#FFFFFF' };
+};
 
 @Component({
   selector: 'main-map',
@@ -24,19 +51,15 @@ export class MainMap implements AfterViewInit {
   selectedMarker: any;
   markers: any;
   private map: any;
-  private red: string = '#cd2d2d';
-  private yellow: string = '#f2d164';
-  private green: string = '#0e8c38';
 
-  private borderRed: string = '#a82323';
-  private borderYellow: string = '#e0b62b';
-  private borderGreen: string = '#0a6b2a';
-
-  constructor(private dataService: DataService) {}
+  constructor() {}
 
   ngAfterViewInit(): void {
     this.initMap();
     this.$stations.subscribe(() => {
+      this.refreshData();
+    });
+    this.$stationsStatistics.subscribe(() => {
       this.refreshData();
     });
   }
@@ -68,22 +91,54 @@ export class MainMap implements AfterViewInit {
   }
 
   addMarkers(stations: any[]): void {
-    this.markers = L.markerClusterGroup({
-      spiderfyOnMaxZoom: false,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: true,
-      maxClusterRadius: 50,
-      iconCreateFunction() {
-        return iconBlueCluster;
-      },
-    });
+    if (!this.$isStatistics.value) {
+      this.markers = L.markerClusterGroup({
+        spiderfyOnMaxZoom: false,
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true,
+        maxClusterRadius: 50,
+        iconCreateFunction() {
+          return iconBlueCluster;
+        },
+      });
+    } else {
+      this.markers = L.markerClusterGroup({
+        spiderfyOnMaxZoom: false,
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true,
+        maxClusterRadius: 50,
+        iconCreateFunction(cluster) {
+          var rates = 0;
+          var compteur = 0;
+          for (let i = 0; i < cluster.getAllChildMarkers().length; i++) {
+            const test = parseFloat(
+              cluster.getAllChildMarkers()[i].options.title ?? '-1'
+            );
+            if (test !== -1) {
+              rates += test;
+              compteur += 1;
+            }
+          }
+          const meanClusterFillingRate = rates / compteur;
+          const { color, borderColor } = determineColorAccordingToFillingRate(
+            meanClusterFillingRate
+          );
+          return createColoredMarkerStatistics(
+            color,
+            borderColor,
+            meanClusterFillingRate,
+            true
+          );
+        },
+      });
+    }
     for (const station of stations) {
       const { latitude, longitude } = station;
       const listStations: { stationId: number; fillingRate: number }[] =
         this.$stationsStatistics.getValue();
       const stationStatistic = listStations.find(
         (element: { stationId: number; fillingRate: number }) =>
-          element.stationId > station.id
+          element.stationId === station.id
       );
       const fillingRate = stationStatistic?.fillingRate;
       // manage the selected station
@@ -101,38 +156,18 @@ export class MainMap implements AfterViewInit {
         });
         this.markers.addLayer(marker);
       } else {
-        var marker = L.marker([latitude, longitude], {
-          icon: createColoredMarkerStatistics('#FFFFFF', '#FFFFFF', undefined),
+        const { color, borderColor } =
+          determineColorAccordingToFillingRate(fillingRate);
+        marker = L.marker([latitude, longitude], {
+          icon: createColoredMarkerStatistics(
+            color,
+            borderColor,
+            fillingRate,
+            false
+          ),
+          title: (fillingRate ?? -1).toString(),
         });
-        if (fillingRate !== undefined && fillingRate < 0.2) {
-          marker = L.marker([latitude, longitude], {
-            icon: createColoredMarkerStatistics(
-              this.red,
-              this.borderRed,
-              fillingRate
-            ),
-          });
-        } else if (
-          fillingRate !== undefined &&
-          fillingRate >= 0.2 &&
-          fillingRate < 0.55
-        ) {
-          marker = L.marker([latitude, longitude], {
-            icon: createColoredMarkerStatistics(
-              this.yellow,
-              this.borderYellow,
-              fillingRate
-            ),
-          });
-        } else if (fillingRate !== undefined && fillingRate >= 0.55) {
-          marker = L.marker([latitude, longitude], {
-            icon: createColoredMarkerStatistics(
-              this.green,
-              this.borderGreen,
-              fillingRate
-            ),
-          });
-        }
+
         this.markers.addLayer(marker);
       }
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
