@@ -31,25 +31,6 @@ footer {
   line-height: 20px;
 }
 
-.spinner-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 16px;
-}
-
-.button-container {
-  width: 80px;
-}
-
-.tab {
-  cursor: pointer;
-}
-
-.active {
-  background-color: rgba(255, 255, 255, .25);;
-}
-
 .timeslot-weekday-scroll {
   position: fixed;
   background-color: white;
