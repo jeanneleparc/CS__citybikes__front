@@ -11,6 +11,8 @@ import { DataService } from './data.service';
 })
 export class AppComponent implements OnInit {
   $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
+  $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
+  $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
   lastUpdatedTime: string = '';
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   loading: boolean = false;
@@ -56,6 +58,11 @@ export class AppComponent implements OnInit {
   // Nav bar logic
   changeTab(tab: string) {
     this.currentTab = tab;
+    if (tab === 'stats') {
+      this.$isStatistics.next(true);
+    } else {
+      this.$isStatistics.next(false);
+    }
   }
 
   refreshDataMain(): void {
@@ -107,7 +114,7 @@ export class AppComponent implements OnInit {
         )
       )
       .subscribe((result) => {
-        console.log(result);
+        this.$stationsStatistics.next(result);
       });
   }
 

@@ -24,7 +24,7 @@
 <div class="main">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
-      <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
+      <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>
       <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
     </div>
     <div *ngSwitchCase="'stats'">
@@ -36,7 +36,7 @@
           <select-scroll [values]="timeslots" [startValueId]="currentTimeslotNumber" (selectedValuesId$)="changeSelectedTimeSlot($event)"></select-scroll>
         </div>
       </div>
-      <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
+      <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>
     </div>
   </div>
   

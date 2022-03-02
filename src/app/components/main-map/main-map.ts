@@ -8,6 +8,7 @@ import {
   iconYellow,
   iconRed,
   iconBlueCluster,
+  createColoredMarkerStatistics,
 } from 'src/app/components/main-map/icons';
 
 @Component({
@@ -17,10 +18,19 @@ import {
 })
 export class MainMap implements AfterViewInit {
   @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
+  @Input() $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
+  @Input() $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Output() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   selectedMarker: any;
   markers: any;
   private map: any;
+  private red: string = '#cd2d2d';
+  private yellow: string = '#f2d164';
+  private green: string = '#0e8c38';
+
+  private borderRed: string = '#a82323';
+  private borderYellow: string = '#e0b62b';
+  private borderGreen: string = '#0a6b2a';
 
   constructor(private dataService: DataService) {}
 
@@ -64,30 +74,68 @@ export class MainMap implements AfterViewInit {
       zoomToBoundsOnClick: true,
       maxClusterRadius: 50,
       iconCreateFunction() {
-        const icon = L.divIcon({
-          iconAnchor: [2, 10 * 2 + 2 * 2],
-          popupAnchor: [0, -(10 * 3 + 2)],
-          html: '<div>Hello</div>',
-        });
         return iconBlueCluster;
       },
     });
     for (const station of stations) {
       const { latitude, longitude } = station;
-      var marker = L.marker([latitude, longitude], { icon: iconBlue });
-      if (!this.stationIsActive(station)) {
-        marker = L.marker([latitude, longitude], { icon: iconRed });
-      }
+      const listStations: { stationId: number; fillingRate: number }[] =
+        this.$stationsStatistics.getValue();
+      const stationStatistic = listStations.find(
+        (element: { stationId: number; fillingRate: number }) =>
+          element.stationId > station.id
+      );
+      const fillingRate = stationStatistic?.fillingRate;
       // manage the selected station
-      if (this.$selectedStation.value?.id == station.id) {
-        marker = L.marker([latitude, longitude], { icon: iconYellow });
-        this.selectedMarker = marker;
+      if (!this.$isStatistics.value) {
+        var marker = L.marker([latitude, longitude], { icon: iconBlue });
+        if (!this.stationIsActive(station)) {
+          marker = L.marker([latitude, longitude], { icon: iconRed });
+        }
+        if (this.$selectedStation.value?.id == station.id) {
+          marker = L.marker([latitude, longitude], { icon: iconYellow });
+          this.selectedMarker = marker;
+        }
+        marker.on('click', (event) => {
+          this.manageSelectedMarker(station, event.target);
+        });
+        this.markers.addLayer(marker);
+      } else {
+        var marker = L.marker([latitude, longitude], {
+          icon: createColoredMarkerStatistics('#FFFFFF', '#FFFFFF', undefined),
+        });
+        if (fillingRate !== undefined && fillingRate < 0.2) {
+          marker = L.marker([latitude, longitude], {
+            icon: createColoredMarkerStatistics(
+              this.red,
+              this.borderRed,
+              fillingRate
+            ),
+          });
+        } else if (
+          fillingRate !== undefined &&
+          fillingRate >= 0.2 &&
+          fillingRate < 0.55
+        ) {
+          marker = L.marker([latitude, longitude], {
+            icon: createColoredMarkerStatistics(
+              this.yellow,
+              this.borderYellow,
+              fillingRate
+            ),
+          });
+        } else if (fillingRate !== undefined && fillingRate >= 0.55) {
+          marker = L.marker([latitude, longitude], {
+            icon: createColoredMarkerStatistics(
+              this.green,
+              this.borderGreen,
+              fillingRate
+            ),
+          });
+        }
+        this.markers.addLayer(marker);
       }
-      marker.on('click', (event) => {
-        this.manageSelectedMarker(station, event.target);
-      });
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
-      this.markers.addLayer(marker);
     }
     this.map.addLayer(this.markers);
   }
