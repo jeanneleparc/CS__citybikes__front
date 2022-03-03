@@ -12,7 +12,7 @@ import { DataService } from './data.service';
 export class AppComponent implements OnInit {
   $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
-  $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
+  $isStatistics: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   lastUpdatedTime: string = '';
   lastUpdatedTime$: BehaviorSubject<string> = new BehaviorSubject('');
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});

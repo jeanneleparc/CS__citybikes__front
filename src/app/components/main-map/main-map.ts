@@ -41,18 +41,21 @@ const createIconCluster = (
   if (!isStatistics) {
     return iconBlueCluster;
   }
-  var rates = 0;
-  var compteur = 0;
-  for (let i = 0; i < cluster.getAllChildMarkers().length; i++) {
-    const fillingRateChild = parseFloat(
+  const childMarkers = cluster.getAllChildMarkers();
+  const { rates, compteur } = childMarkers.reduce(
+    (previousValue, currentValue) => {
       // @ts-ignore: Unreachable code error
-      cluster.getAllChildMarkers()[i].fillingRate
-    );
-    if (fillingRateChild !== -1) {
-      rates += fillingRateChild;
-      compteur += 1;
-    }
-  }
+      if (currentValue.fillingRate !== -1) {
+        return {
+          // @ts-ignore: Unreachable code error
+          rates: currentValue.fillingRate + previousValue.rates,
+          compteur: previousValue.compteur + 1,
+        };
+      }
+      return previousValue;
+    },
+    { rates: 0, compteur: 0 }
+  );
   const meanClusterFillingRate = rates / compteur;
   const { color, borderColor } = determineColorAccordingToFillingRate(
     meanClusterFillingRate
