@@ -7,7 +7,7 @@ import {
   iconYellow,
   iconRed,
   iconBlueCluster,
-  createColoredMarkerStatistics,
+  createColoredMarker,
 } from 'src/app/components/main-map/icons';
 
 const markerColors = {
@@ -19,23 +19,51 @@ const markerColors = {
   borderGreen: '#0a6b2a',
 };
 const determineColorAccordingToFillingRate = (
-  fillingRate: any
+  fillingRate: number
 ): { color: string; borderColor: string } => {
-  if (fillingRate !== undefined && fillingRate < 0.2) {
+  if (fillingRate < 0.2 && fillingRate >= 0) {
     return { color: markerColors.red, borderColor: markerColors.borderRed };
-  } else if (
-    fillingRate !== undefined &&
-    fillingRate >= 0.2 &&
-    fillingRate < 0.55
-  ) {
+  } else if (fillingRate >= 0.2 && fillingRate < 0.55) {
     return {
       color: markerColors.yellow,
       borderColor: markerColors.borderYellow,
     };
-  } else if (fillingRate !== undefined && fillingRate >= 0.55) {
+  } else if (fillingRate >= 0.55) {
     return { color: markerColors.green, borderColor: markerColors.borderGreen };
   }
-  return { color: '#FFFFFF', borderColor: '#FFFFFF' };
+  return { color: '', borderColor: '' };
+};
+
+const createIconCluster = (
+  isStatistics: boolean,
+  cluster: L.MarkerCluster
+): L.Icon => {
+  if (!isStatistics) {
+    return iconBlueCluster;
+  }
+  var rates = 0;
+  var compteur = 0;
+  for (let i = 0; i < cluster.getAllChildMarkers().length; i++) {
+    const fillingRateChild = parseFloat(
+      // @ts-ignore: Unreachable code error
+      cluster.getAllChildMarkers()[i].fillingRate
+    );
+    if (fillingRateChild !== -1) {
+      rates += fillingRateChild;
+      compteur += 1;
+    }
+  }
+  const meanClusterFillingRate = rates / compteur;
+  const { color, borderColor } = determineColorAccordingToFillingRate(
+    meanClusterFillingRate
+  );
+  return createColoredMarker(
+    color,
+    borderColor,
+    meanClusterFillingRate,
+    true,
+    true
+  );
 };
 
 @Component({
@@ -91,56 +119,18 @@ export class MainMap implements AfterViewInit {
   }
 
   addMarkers(stations: any[]): void {
-    if (!this.$isStatistics.value) {
-      this.markers = L.markerClusterGroup({
-        spiderfyOnMaxZoom: false,
-        showCoverageOnHover: false,
-        zoomToBoundsOnClick: true,
-        maxClusterRadius: 50,
-        iconCreateFunction() {
-          return iconBlueCluster;
-        },
-      });
-    } else {
-      this.markers = L.markerClusterGroup({
-        spiderfyOnMaxZoom: false,
-        showCoverageOnHover: false,
-        zoomToBoundsOnClick: true,
-        maxClusterRadius: 50,
-        iconCreateFunction(cluster) {
-          var rates = 0;
-          var compteur = 0;
-          for (let i = 0; i < cluster.getAllChildMarkers().length; i++) {
-            const test = parseFloat(
-              cluster.getAllChildMarkers()[i].options.title ?? '-1'
-            );
-            if (test !== -1) {
-              rates += test;
-              compteur += 1;
-            }
-          }
-          const meanClusterFillingRate = rates / compteur;
-          const { color, borderColor } = determineColorAccordingToFillingRate(
-            meanClusterFillingRate
-          );
-          return createColoredMarkerStatistics(
-            color,
-            borderColor,
-            meanClusterFillingRate,
-            true
-          );
-        },
-      });
-    }
+    const isStatistics = this.$isStatistics.value;
+    this.markers = L.markerClusterGroup({
+      spiderfyOnMaxZoom: false,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      maxClusterRadius: 50,
+      iconCreateFunction(cluster) {
+        return createIconCluster(isStatistics, cluster);
+      },
+    });
     for (const station of stations) {
       const { latitude, longitude } = station;
-      const listStations: { stationId: number; fillingRate: number }[] =
-        this.$stationsStatistics.getValue();
-      const stationStatistic = listStations.find(
-        (element: { stationId: number; fillingRate: number }) =>
-          element.stationId === station.id
-      );
-      const fillingRate = stationStatistic?.fillingRate;
       // manage the selected station
       if (!this.$isStatistics.value) {
         var marker = L.marker([latitude, longitude], { icon: iconBlue });
@@ -156,19 +146,29 @@ export class MainMap implements AfterViewInit {
         });
         this.markers.addLayer(marker);
       } else {
+        const listStations: { stationId: number; fillingRate: number }[] =
+          this.$stationsStatistics.getValue();
+        const stationStatistic = listStations.find(
+          (element: { stationId: number; fillingRate: number }) =>
+            element.stationId === station.id
+        );
+        const fillingRate = stationStatistic?.fillingRate ?? -1;
         const { color, borderColor } =
           determineColorAccordingToFillingRate(fillingRate);
-        marker = L.marker([latitude, longitude], {
-          icon: createColoredMarkerStatistics(
-            color,
-            borderColor,
-            fillingRate,
-            false
-          ),
-          title: (fillingRate ?? -1).toString(),
-        });
-
-        this.markers.addLayer(marker);
+        if (color !== '') {
+          marker = L.marker([latitude, longitude], {
+            icon: createColoredMarker(
+              color,
+              borderColor,
+              fillingRate,
+              false,
+              true
+            ),
+          });
+          // @ts-ignore: Unreachable code error
+          marker.fillingRate = fillingRate;
+          this.markers.addLayer(marker);
+        }
       }
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
     }
