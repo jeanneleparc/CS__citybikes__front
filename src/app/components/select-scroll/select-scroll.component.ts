@@ -20,15 +20,15 @@ export class SelectScrollComponent implements OnInit {
   ngOnInit(): void {
     this.selectedValuesId$.next(this.startValueId);
     this.selectedValue$.next(this.values[this.startValueId]);
+    this.selectedValuesId$.subscribe((id) => {
+      this.selectedValue$.next(this.values[id]);
+    });
   }
 
   goToNext(): void {
     this.selectedValuesId$.next(
       (this.selectedValuesId$.value + 1) % this.values.length
     );
-    this.selectedValuesId$.subscribe((id) => {
-      this.selectedValue$.next(this.values[id]);
-    });
   }
 
   goToPrevious(): void {
@@ -36,8 +36,5 @@ export class SelectScrollComponent implements OnInit {
       (this.selectedValuesId$.value + this.values.length - 1) %
         this.values.length
     );
-    this.selectedValuesId$.subscribe((id) => {
-      this.selectedValue$.next(this.values[id]);
-    });
   }
 }

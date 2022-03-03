@@ -28,10 +28,8 @@ const determineColorAccordingToFillingRate = (
       color: markerColors.yellow,
       borderColor: markerColors.borderYellow,
     };
-  } else if (fillingRate >= 0.55) {
-    return { color: markerColors.green, borderColor: markerColors.borderGreen };
   }
-  return { color: '', borderColor: '' };
+  return { color: markerColors.green, borderColor: markerColors.borderGreen };
 };
 
 const createIconCluster = (
@@ -158,7 +156,7 @@ export class MainMap implements AfterViewInit {
         const fillingRate = stationStatistic?.fillingRate ?? -1;
         const { color, borderColor } =
           determineColorAccordingToFillingRate(fillingRate);
-        if (color !== '') {
+        if (fillingRate !== -1) {
           marker = L.marker([latitude, longitude], {
             icon: createColoredMarker(
               color,
