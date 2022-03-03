@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment-timezone';
 import { BehaviorSubject, combineLatest, timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, mergeMap } from 'rxjs/operators';
 import { DataService } from './data.service';
-import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
