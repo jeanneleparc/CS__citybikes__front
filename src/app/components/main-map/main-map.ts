@@ -16,18 +16,18 @@ const determineColorAccordingToFillingRate = (
 ): { color: string; borderColor: string } => {
   if (fillingRate < 0.2 && fillingRate >= 0) {
     return {
-      color: colors.redStatistics,
-      borderColor: colors.darkRedStatistics,
+      color: colors.red,
+      borderColor: colors.darkRed,
     };
   } else if (fillingRate >= 0.2 && fillingRate < 0.55) {
     return {
-      color: colors.yellowStatistics,
-      borderColor: colors.darkYellowStatistics,
+      color: colors.yellow,
+      borderColor: colors.darkYellow,
     };
   }
   return {
-    color: colors.greenStatistics,
-    borderColor: colors.darkGreenStatistics,
+    color: colors.green,
+    borderColor: colors.darkGreen,
   };
 };
 
