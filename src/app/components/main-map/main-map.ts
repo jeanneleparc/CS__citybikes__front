@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, Output, Input } from '@angular/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { colors } from 'src/colors';
@@ -10,6 +10,7 @@ import {
   iconBlueCluster,
   createColoredMarker,
 } from 'src/app/components/main-map/icons';
+import { filter } from 'rxjs/operators';
 
 const determineColorAccordingToFillingRate = (
   fillingRate: number
@@ -79,7 +80,8 @@ export class MainMap implements AfterViewInit {
   @Output() $selectedStationChange: BehaviorSubject<any> = new BehaviorSubject(
     {}
   );
-  selectedMarker: any;
+  prevSelectedMarker: any;
+  prevSelectedStation: any;
   markers: any;
   private map: any;
 
@@ -87,7 +89,7 @@ export class MainMap implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    combineLatest([this.$stations, this.$selectedStation]).subscribe(() => {
+    this.$stations.subscribe(() => {
       this.refreshData();
     });
     this.$stationsStatistics.subscribe(() => {
@@ -147,7 +149,7 @@ export class MainMap implements AfterViewInit {
 
         if (this.$selectedStation.getValue()?.id == station.id) {
           marker = L.marker([latitude, longitude], { icon: iconYellow });
-          this.selectedMarker = marker;
+          this.prevSelectedMarker = marker;
         }
         this.markers.addLayer(marker);
       } else {
@@ -177,13 +179,31 @@ export class MainMap implements AfterViewInit {
       }
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
     }
+
+    this.$selectedStation
+      .pipe(filter((station) => station === null))
+      .subscribe(() => {
+        this.resetPrevMarker();
+      });
     this.map.addLayer(this.markers);
   }
 
   manageSelectedMarker(station: any, newSelectedMarker: any) {
+    newSelectedMarker.setIcon(iconYellow);
+    this.resetPrevMarker();
     this.$selectedStationChange.next(station);
-    if (!this.selectedMarker) {
-      newSelectedMarker.setIcon(iconYellow);
+    this.prevSelectedStation = station;
+    this.prevSelectedMarker = newSelectedMarker;
+  }
+
+  resetPrevMarker() {
+    if (this.prevSelectedMarker) {
+      if (!this.stationIsActive(this.prevSelectedStation)) {
+        this.prevSelectedMarker.setIcon(iconRed);
+      } else {
+        console.log('blue');
+        this.prevSelectedMarker.setIcon(iconBlue);
+      }
     }
   }
 
@@ -197,6 +217,6 @@ export class MainMap implements AfterViewInit {
   }
 
   stationIsActive(station: any) {
-    return station.station_status == 'active';
+    return station?.station_status == 'active';
   }
 }
