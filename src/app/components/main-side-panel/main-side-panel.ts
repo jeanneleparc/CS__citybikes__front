@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'main-side-panel',
   templateUrl: './main-side-panel.html',
-  styleUrls: ['./main-side-panel.css'],
+  styleUrls: ['./main-side-panel.scss'],
 })
 export class MainSidePanel implements OnInit {
   @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});

@@ -1,3 +1,5 @@
+@use "src/colors";
+
 p {
   margin: 0 0;
   justify-content: center;
@@ -25,5 +27,5 @@ p {
 }
 
 .spinner-border{
-  color: #ffa05b;
+  color: colors.$orange;
 }

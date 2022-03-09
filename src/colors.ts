@@ -1,0 +1,16 @@
+export const colors = {
+  white: '#FFFFFF',
+  redStatistics: '#cd2d2d',
+  darkRedStatistics: '#a82323',
+  yellowStatistics: '#f2d164',
+  darkYellowStatistics: '#e0b62b',
+  greenStatistics: '#0e8c38',
+  darkGreenStatistics: '#0a6b2a',
+  boxShadow : 'rgba(0,0,0,0.26)',
+  boxShadowIcon: 'rgba(55,55,55,0.3)',
+  blue: '#247DCE',
+  red: '#f26157',
+  yellow: '#f2cd5d',
+  orange: '#ffa05b',
+  darkOrange: '#ff6b00',
+} as const;

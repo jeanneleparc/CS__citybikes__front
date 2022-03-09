@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'select-scroll',
   templateUrl: './select-scroll.component.html',
-  styleUrls: ['./select-scroll.component.css'],
+  styleUrls: ['./select-scroll.component.scss'],
 })
 export class SelectScrollComponent implements OnInit {
   @Input() values: string[] = [];
