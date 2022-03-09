@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, Output, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { colors } from 'src/colors';
@@ -73,6 +73,7 @@ const createIconCluster = (
 })
 export class MainMap implements AfterViewInit {
   @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
+  @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   @Input() $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
   @Input() $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Output() $selectedStationChange: BehaviorSubject<any> = new BehaviorSubject(
@@ -86,7 +87,7 @@ export class MainMap implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.$stations.subscribe(() => {
+    combineLatest([this.$stations, this.$selectedStation]).subscribe(() => {
       this.refreshData();
     });
     this.$stationsStatistics.subscribe(() => {
@@ -139,13 +140,15 @@ export class MainMap implements AfterViewInit {
         if (!this.stationIsActive(station)) {
           marker = L.marker([latitude, longitude], { icon: iconRed });
         }
-        if (this.$selectedStationChange.value?.id == station.id) {
-          marker = L.marker([latitude, longitude], { icon: iconYellow });
-          this.selectedMarker = marker;
-        }
+
         marker.on('click', (event) => {
           this.manageSelectedMarker(station, event.target);
         });
+
+        if (this.$selectedStation.getValue()?.id == station.id) {
+          marker = L.marker([latitude, longitude], { icon: iconYellow });
+          this.selectedMarker = marker;
+        }
         this.markers.addLayer(marker);
       } else {
         const listStations: { stationId: number; fillingRate: number }[] =
@@ -178,19 +181,10 @@ export class MainMap implements AfterViewInit {
   }
 
   manageSelectedMarker(station: any, newSelectedMarker: any) {
+    this.$selectedStationChange.next(station);
     if (!this.selectedMarker) {
       newSelectedMarker.setIcon(iconYellow);
-    } else if (newSelectedMarker != this.selectedMarker) {
-      const prevSelectedStation = this.$selectedStationChange.getValue();
-      if (!this.stationIsActive(prevSelectedStation)) {
-        this.selectedMarker.setIcon(iconRed);
-      } else {
-        this.selectedMarker.setIcon(iconBlue);
-      }
-      newSelectedMarker.setIcon(iconYellow);
     }
-    this.$selectedStationChange.next(station);
-    this.selectedMarker = newSelectedMarker;
   }
 
   createMarkerPopup(station: any): string {
