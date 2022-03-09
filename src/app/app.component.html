@@ -10,12 +10,14 @@
       <li *ngFor="let tab of tabs" class="nav-item" [class.active]="currentTab == tab.name">
         <span class="nav-link" (click)="changeTab(tab.name)">{{ tab.title }}</span>
       </li>
-      <li class="nav-item">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      <li class="nav-item dropdown" [class.active]="currentTab != 'main'">
+        <a class="nav-link dropdown-toggle" href="#" id="statistics" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Statistics
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li *ngFor="let tab of statsTabs"><a class="dropdown-item" (click)="changeTab(tab.name)">{{ tab.title }}</a></li>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="statistics">
+          <li *ngFor="let tab of statsTabs">
+            <a class="dropdown-item" (click)="changeTab(tab.name)">{{ tab.title }}</a>
+          </li>
         </ul>
       </li>
     </ul>
@@ -26,6 +28,7 @@
   </div>
 </nav>
 
+<!-- Main -->
 <div class="main position-relative">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
@@ -44,12 +47,14 @@
       </div>
       <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>
     </div>
-    <div *ngSwitchCase="'stats-ranking'">
+
+    <div *ngSwitchCase="'stats-ranking'" class="content">
       <stats-ranking></stats-ranking>
     </div>
   </div>
   <router-outlet></router-outlet>
 </div>
+
 <!-- Footer -->
 <footer>
   Developped by CentraleSupélec students : Bouyssel Camille, Le Parc Jeanne, Ni Clara.
