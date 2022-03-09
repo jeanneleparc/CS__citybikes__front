@@ -1,16 +1,74 @@
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Ranking</th>
-        <th scope="col">Station name</th>
-        <th scope="col">Filling rate</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let station of topStations; let index = index;">
-        <th>{{ index+1 }}</th>
-        <th>{{ station.stationName }}</th>
-        <td>{{ station.fillingRate }} %</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="main">
+  <h1 class="title">Statistics - classification by filling rate </h1>
+  <div>
+    <p class="select-text mb-12">Please pick a time slot</p>
+    <div class="flex">
+      <button type="button" class="btn btn-default btn-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ selectedDay || "Pick a weekday" }}<i class="fas fa-chevron-down fa-xs ml-12"></i>
+      </button>
+      <div class="dropdown-menu">
+        <a *ngFor="let weekday of weekdays" (click)="onSelectWeekDay(weekday)">
+          <span class="dropdown-menu-container">
+            <span class="dropdown-menu-item">{{ weekday }}</span>
+          </span>
+        </a>
+      </div>
+      <button type="button" class="btn btn-default btn-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ selectedTimeSlot?.text || "Pick a time slot" }}<i class="fas fa-chevron-down fa-xs ml-12"></i>
+      </button>
+      <dropdown-menu class="dropdown-menu" [menuItems]="timeslotMenus" (itemSelected)="onSelectTimeSlot($event)"></dropdown-menu>      
+    </div>
+  </div>
+  <div class="flex table-container">
+    <table *ngIf="topStations.length != 0" class="table">
+      <thead>
+        <tr>
+          <th scope="col">Ranking</th>
+          <th scope="col">Station name</th>
+          <th scope="col">Filling rate</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="!loading">
+        <tr *ngFor="let station of topStations; let index = index;">
+          <th>{{ index+1 }}</th>
+          <th>{{ station.stationName }}</th>
+          <td>{{ station.fillingRate }} %</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="loading" class="spinner-container">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #pickTimeSlot>
+  <p>Pick a time slot</p>
+</ng-template>
+
+
+<!-- <button id="timeSlotDropDown" type="button" class="btn btn-default btn-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+  {{ selectedTimeSlot?.text || "Pick a time slot" }}<i class="fas fa-chevron-down fa-xs ml-12"></i>
+</button>
+<dropdown-menu class="dropdown-menu" [menuItems]="timeslotMenus" (itemSelected)="onItemSelected($event)"></dropdown-menu> -->
+
+
+<!-- <select type="button" class="form-select picker" data-bs-toggle="dropdown" aria-expanded="false">
+  <option disabled selected value style="display:none">{{ selectedTimeSlot?.text || "Pick a time slot" }}</option>
+</select>
+<dropdown-menu class="dropdown-menu" [menuItems]="timeslotMenus" (itemSelected)="onItemSelected($event)"></dropdown-menu> -->
+
+<!-- <select  [(ngModel)]="selectedTimeSlot" (change)="$onSelectChange.emit(true)" class="form-select picker" aria-label="Pick a time slot">
+  <option [value]="null" hidden>Pick a time slot</option>
+  <option *ngFor="let item of timeslotMenus;let i = index" (click)="$event.stopPropagation()">
+    <span class="dropdown-menu-container">
+      <span class="dropdown-menu-item">{{ item.text }}</span>
+    </span>
+    <div class="submenu-container">
+      <span *ngFor="let sub of item.subMenu;let j = index" class="submenu-item"
+        (click)="onClick($event, i, j)"> {{ sub.text }}</span> 
+    </div>
+  </option>
+</select> -->

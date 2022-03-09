@@ -16,8 +16,8 @@ export class DataService {
   }
 
   public sendPostAvgFillingRateByIdByDayRequest(
-    idStation: Number,
-    day: String
+    idStation: number,
+    day: string
   ) {
     return this.httpClient.post<any>(
       `${this.REST_API_SERVER}/stats_avg_filling_rate_by_station`,

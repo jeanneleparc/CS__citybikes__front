@@ -1,6 +1,5 @@
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MainMap } from 'src/app/components/main-map/main-map';
@@ -9,6 +8,9 @@ import { BarChart } from 'src/app/components/bar-chart/bar-chart';
 import { ChartsModule } from 'ng2-charts';
 import { SelectScrollComponent } from 'src/app/components/select-scroll/select-scroll.component';
 import { StatsRanking } from './components/stats-ranking/stats-ranking';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { DropdownMenuComponent } from './components/dropdown-menu/dropdown-menu';
 
 @NgModule({
   declarations: [
@@ -18,8 +20,15 @@ import { StatsRanking } from './components/stats-ranking/stats-ranking';
     BarChart,
     SelectScrollComponent,
     StatsRanking,
+    DropdownMenuComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ChartsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ChartsModule,
+    FormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
