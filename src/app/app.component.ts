@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment-timezone';
-import { BehaviorSubject, timer } from 'rxjs';
+import { BehaviorSubject, combineLatest, timer } from 'rxjs';
+import { switchMap, mergeMap } from 'rxjs/operators';
 import { DataService } from './data.service';
-import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +11,9 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
+  $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
+  $isStatistics: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  lastUpdatedTime: string = '';
   lastUpdatedTime$: BehaviorSubject<string> = new BehaviorSubject('');
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   loading: boolean = false;
@@ -26,10 +29,41 @@ export class AppComponent implements OnInit {
   ];
   currentTab: string = 'main';
 
+  // Statistics variables
+  selectedDay$: BehaviorSubject<string> = new BehaviorSubject('Monday');
+  selectedTimeSlot$: BehaviorSubject<number> = new BehaviorSubject(0);
+  days: string[] = [...Array(7).keys()].map((i) =>
+    moment().startOf('weeks').add(i, 'days').format('dddd')
+  );
+  timeslots: string[] = [...Array(24).keys()].map(
+    (i) =>
+      `${moment().startOf('day').add(i, 'hours').format('hh a')} - ${moment()
+        .startOf('day')
+        .add(i + 1, 'hours')
+        .format('hh a')}`
+  );
+
+  currentDayNumber: number = moment().tz('America/New_York').day();
+  currentTimeslotNumber: number = parseInt(
+    moment().tz('America/New_York').format('HH'),
+    10
+  );
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.autoRefreshData();
+    this.refreshDataStatistics();
+  }
+
+  // Nav bar logic
+  changeTab(tab: string) {
+    this.currentTab = tab;
+    if (tab === 'stats') {
+      this.$isStatistics.next(true);
+    } else {
+      this.$isStatistics.next(false);
+    }
   }
 
   autoRefreshData(): void {
@@ -83,7 +117,27 @@ export class AppComponent implements OnInit {
     this.$selectedStation.next(newSelectedStation);
   }
 
-  changeTab(tab: string) {
-    this.currentTab = tab;
+  // Statistics functions
+  refreshDataStatistics(): void {
+    combineLatest([this.selectedTimeSlot$, this.selectedDay$])
+      .pipe(
+        switchMap(([timeslot, day]) =>
+          this.dataService.sendPostAvgFillingRateByTimeslotByDayRequest(
+            timeslot,
+            day
+          )
+        )
+      )
+      .subscribe((result) => {
+        this.$stationsStatistics.next(result);
+      });
+  }
+
+  changeSelectedDay(dayId: number): void {
+    this.selectedDay$.next(this.days[dayId]);
+  }
+
+  changeSelectedTimeSlot(timeslotId: number): void {
+    this.selectedTimeSlot$.next(timeslotId);
   }
 }

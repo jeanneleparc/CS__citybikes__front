@@ -5,41 +5,53 @@ const blue = '#247dce';
 const red = '#f26157';
 const yellow = '#f2cd5d';
 
-var caption = '',
-  size = 10,
+var size = 10,
   border = 2;
 
-var captionStyles = `\
-  transform: rotate(-45deg); \
-  display:block; \
-  width: ${size * 3}px; \
-  text-align: center; \
-  line-height: ${size * 3}px;`;
-
-function getColoredMarker(color: string): string {
+function getColoredMarker(
+  color: string,
+  borderColor: string,
+  fillingRate: number,
+  isShifted: boolean,
+  isStatistics: boolean
+): string {
   return `\
-    background-color: ${color}; \
     width: ${size * 3}px; \
     height: ${size * 3}px; \
     display: block; \
-    left: ${size * -1.5}px; \
-    top: ${size * -1.5}px; \
+    left: ${!isShifted ? size * -1.5 : -1}px; \
+    top: ${!isShifted ? size * -1.5 : 3}px; \
     position: relative; \
-    border-radius: ${size * 3}px ${size * 3}px 0; \
-    transform: rotate(45deg); \
-    border: ${border}px solid #FFFFFF;`;
+    border-radius: ${size * 3}px ${size * 3}px 0;  \
+    ${
+      !isStatistics
+        ? `background-color: ${color};`
+        : `background: linear-gradient(315deg, ${color} 0%, ${color} ${
+            fillingRate * 100
+          }%,#FFFFFF ${fillingRate * 100 + 1}%, #FFFFFF 100%); \ 
+        box-shadow : 5px 4px 5px 0px rgba(55,55,55,0.3);`
+    }\
+    ${!isShifted ? `transform: rotate(45deg);` : ``} \
+    border: ${border}px solid ${!isStatistics ? `#FFFFFF` : borderColor};`;
 }
 
-function createColoredMarker(color: string): any {
+export function createColoredMarker(
+  color: string,
+  borderColor: string,
+  fillingRate: any,
+  isCluster: boolean,
+  isStatistics: boolean
+): any {
   return L.divIcon({
     className: `color-pin-${color}`,
     iconAnchor: [border, size * 2 + border * 2],
     popupAnchor: [0, -(size * 3 + border)],
     // eslint-disable-next-line prettier/prettier
-    html: `<span style="${getColoredMarker(color)}"><span style="${captionStyles}">${caption}</span></span>`
+    html: `<span style="${getColoredMarker(color, borderColor, fillingRate, false, isStatistics)}">${isCluster ? `<span style="${getColoredMarker(color, borderColor, fillingRate, true, isStatistics)}"></span>`:``} </span>`
   });
 }
 
-export const iconBlue = createColoredMarker(blue);
-export const iconRed = createColoredMarker(red);
-export const iconYellow = createColoredMarker(yellow);
+export const iconBlue = createColoredMarker(blue, '', null, false, false);
+export const iconBlueCluster = createColoredMarker(blue, '', null, true, false);
+export const iconRed = createColoredMarker(red, '', null, false, false);
+export const iconYellow = createColoredMarker(yellow, '', null, false, false);

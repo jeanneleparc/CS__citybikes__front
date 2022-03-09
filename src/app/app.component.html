@@ -21,11 +21,19 @@
 <div class="main position-relative">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
-      <main-map [$stations]="$stations" ($selectedStation)="changeSelectedStation($event)"></main-map>
+      <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>
       <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
     </div>
     <div *ngSwitchCase="'stats'">
-      Hello
+      <div class="d-flex justify-content-around timeslot-weekday-scroll">
+        <div class="d-flex justify-content-around weekday-scroll">
+          <select-scroll [values]="days" [startValueId]="currentDayNumber" (selectedValuesId$)="changeSelectedDay($event)"></select-scroll>
+        </div>
+        <div class="d-flex justify-content-around timeslot-scroll">
+          <select-scroll [values]="timeslots" [startValueId]="currentTimeslotNumber" (selectedValuesId$)="changeSelectedTimeSlot($event)"></select-scroll>
+        </div>
+      </div>
+      <main-map [$stations]="$stations" [$stationsStatistics]="$stationsStatistics" [$isStatistics]="$isStatistics" ($selectedStation)="changeSelectedStation($event)"></main-map>
     </div>
   </div>
   
