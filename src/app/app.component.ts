@@ -13,8 +13,7 @@ export class AppComponent implements OnInit {
   $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
   $isStatistics: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  lastUpdatedTime: string = '';
-  lastUpdatedTime$: BehaviorSubject<string> = new BehaviorSubject('');
+  $lastUpdatedTime: BehaviorSubject<string> = new BehaviorSubject('');
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   loading: boolean = false;
   tabs: any[] = [
@@ -30,8 +29,8 @@ export class AppComponent implements OnInit {
   currentTab: string = 'main';
 
   // Statistics variables
-  selectedDay$: BehaviorSubject<string> = new BehaviorSubject('Monday');
-  selectedTimeSlot$: BehaviorSubject<number> = new BehaviorSubject(0);
+  $selectedDay: BehaviorSubject<string> = new BehaviorSubject('Monday');
+  $selectedTimeSlot: BehaviorSubject<number> = new BehaviorSubject(0);
   days: string[] = [...Array(7).keys()].map((i) =>
     moment().startOf('weeks').add(i, 'days').format('dddd')
   );
@@ -93,7 +92,7 @@ export class AppComponent implements OnInit {
     if (brutLastUpdatedTime != '') {
       const lastUpdatedDate =
         moment(brutLastUpdatedTime).tz('America/New_York');
-      this.lastUpdatedTime$.next(
+      this.$lastUpdatedTime.next(
         `${lastUpdatedDate.format('hh:mm a')} on ${lastUpdatedDate.format(
           'YYYY-MM-DD'
         )} EST`
@@ -119,7 +118,7 @@ export class AppComponent implements OnInit {
 
   // Statistics functions
   refreshDataStatistics(): void {
-    combineLatest([this.selectedTimeSlot$, this.selectedDay$])
+    combineLatest([this.$selectedTimeSlot, this.$selectedDay])
       .pipe(
         switchMap(([timeslot, day]) =>
           this.dataService.sendPostAvgFillingRateByTimeslotByDayRequest(
@@ -134,10 +133,10 @@ export class AppComponent implements OnInit {
   }
 
   changeSelectedDay(dayId: number): void {
-    this.selectedDay$.next(this.days[dayId]);
+    this.$selectedDay.next(this.days[dayId]);
   }
 
   changeSelectedTimeSlot(timeslotId: number): void {
-    this.selectedTimeSlot$.next(timeslotId);
+    this.$selectedTimeSlot.next(timeslotId);
   }
 }

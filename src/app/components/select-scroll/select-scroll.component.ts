@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 export class SelectScrollComponent implements OnInit {
   @Input() values: string[] = [];
   @Input() startValueId: number = 0;
-  @Output() selectedValuesId$: BehaviorSubject<number> = new BehaviorSubject(
+  @Output() $selectedValuesId: BehaviorSubject<number> = new BehaviorSubject(
     this.startValueId
   );
 
@@ -18,22 +18,22 @@ export class SelectScrollComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.selectedValuesId$.next(this.startValueId);
+    this.$selectedValuesId.next(this.startValueId);
     this.selectedValue$.next(this.values[this.startValueId]);
-    this.selectedValuesId$.subscribe((id) => {
+    this.$selectedValuesId.subscribe((id) => {
       this.selectedValue$.next(this.values[id]);
     });
   }
 
   goToNext(): void {
-    this.selectedValuesId$.next(
-      (this.selectedValuesId$.value + 1) % this.values.length
+    this.$selectedValuesId.next(
+      (this.$selectedValuesId.value + 1) % this.values.length
     );
   }
 
   goToPrevious(): void {
-    this.selectedValuesId$.next(
-      (this.selectedValuesId$.value + this.values.length - 1) %
+    this.$selectedValuesId.next(
+      (this.$selectedValuesId.value + this.values.length - 1) %
         this.values.length
     );
   }
