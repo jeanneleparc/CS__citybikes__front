@@ -1,4 +1,4 @@
-<div *ngIf="!(loading$ | async); else spinner" id="myBarChart">
+<div *ngIf="!($loading | async); else spinner" id="myBarChart">
   <div style="display: block;">
     <div class="d-flex justify-content-around day-of-the-week">
       <button type="button" class="btn btn-default" (click)="goToPreviousDay()">
