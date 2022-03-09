@@ -75,7 +75,9 @@ export class MainMap implements AfterViewInit {
   @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Input() $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
   @Input() $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
-  @Output() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  @Output() $selectedStationChange: BehaviorSubject<any> = new BehaviorSubject(
+    {}
+  );
   selectedMarker: any;
   markers: any;
   private map: any;
@@ -137,7 +139,7 @@ export class MainMap implements AfterViewInit {
         if (!this.stationIsActive(station)) {
           marker = L.marker([latitude, longitude], { icon: iconRed });
         }
-        if (this.$selectedStation.value?.id == station.id) {
+        if (this.$selectedStationChange.value?.id == station.id) {
           marker = L.marker([latitude, longitude], { icon: iconYellow });
           this.selectedMarker = marker;
         }
@@ -179,7 +181,7 @@ export class MainMap implements AfterViewInit {
     if (!this.selectedMarker) {
       newSelectedMarker.setIcon(iconYellow);
     } else if (newSelectedMarker != this.selectedMarker) {
-      const prevSelectedStation = this.$selectedStation.getValue();
+      const prevSelectedStation = this.$selectedStationChange.getValue();
       if (!this.stationIsActive(prevSelectedStation)) {
         this.selectedMarker.setIcon(iconRed);
       } else {
@@ -187,7 +189,7 @@ export class MainMap implements AfterViewInit {
       }
       newSelectedMarker.setIcon(iconYellow);
     }
-    this.$selectedStation.next(station);
+    this.$selectedStationChange.next(station);
     this.selectedMarker = newSelectedMarker;
   }
 
