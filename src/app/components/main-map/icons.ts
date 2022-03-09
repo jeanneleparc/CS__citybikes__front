@@ -1,9 +1,5 @@
 import * as L from 'leaflet';
-
-// icon with colors
-const blue = '#247dce';
-const red = '#f26157';
-const yellow = '#f2cd5d';
+import { colors } from 'src/colors';
 
 var size = 10,
   border = 2;
@@ -28,11 +24,15 @@ function getColoredMarker(
         ? `background-color: ${color};`
         : `background: linear-gradient(315deg, ${color} 0%, ${color} ${
             fillingRate * 100
-          }%,#FFFFFF ${fillingRate * 100 + 1}%, #FFFFFF 100%); \ 
-        box-shadow : 5px 4px 5px 0px rgba(55,55,55,0.3);`
+          }%,${colors.white} ${fillingRate * 100 + 1}%, ${
+            colors.white
+          } 100%); \ 
+        box-shadow : 5px 4px 5px 0px ${colors.boxShadowIcon};`
     }\
     ${!isShifted ? `transform: rotate(45deg);` : ``} \
-    border: ${border}px solid ${!isStatistics ? `#FFFFFF` : borderColor};`;
+    border: ${border}px solid ${
+    !isStatistics ? `${colors.white}` : borderColor
+  };`;
 }
 
 export function createColoredMarker(
@@ -51,7 +51,25 @@ export function createColoredMarker(
   });
 }
 
-export const iconBlue = createColoredMarker(blue, '', null, false, false);
-export const iconBlueCluster = createColoredMarker(blue, '', null, true, false);
-export const iconRed = createColoredMarker(red, '', null, false, false);
-export const iconYellow = createColoredMarker(yellow, '', null, false, false);
+export const iconBlue = createColoredMarker(
+  colors.blue,
+  '',
+  null,
+  false,
+  false
+);
+export const iconBlueCluster = createColoredMarker(
+  colors.blue,
+  '',
+  null,
+  true,
+  false
+);
+export const iconRed = createColoredMarker(colors.red, '', null, false, false);
+export const iconYellow = createColoredMarker(
+  colors.yellow,
+  '',
+  null,
+  false,
+  false
+);

@@ -2,6 +2,7 @@ import { Component, AfterViewInit, Output, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import { colors } from 'src/colors';
 import {
   iconBlue,
   iconYellow,
@@ -10,26 +11,24 @@ import {
   createColoredMarker,
 } from 'src/app/components/main-map/icons';
 
-const markerColors = {
-  red: '#cd2d2d',
-  borderRed: '#a82323',
-  yellow: '#f2d164',
-  borderYellow: '#e0b62b',
-  green: '#0e8c38',
-  borderGreen: '#0a6b2a',
-};
 const determineColorAccordingToFillingRate = (
   fillingRate: number
 ): { color: string; borderColor: string } => {
   if (fillingRate < 0.2 && fillingRate >= 0) {
-    return { color: markerColors.red, borderColor: markerColors.borderRed };
+    return {
+      color: colors.red,
+      borderColor: colors.darkRed,
+    };
   } else if (fillingRate >= 0.2 && fillingRate < 0.55) {
     return {
-      color: markerColors.yellow,
-      borderColor: markerColors.borderYellow,
+      color: colors.yellow,
+      borderColor: colors.darkYellow,
     };
   }
-  return { color: markerColors.green, borderColor: markerColors.borderGreen };
+  return {
+    color: colors.green,
+    borderColor: colors.darkGreen,
+  };
 };
 
 const createIconCluster = (
@@ -70,7 +69,7 @@ const createIconCluster = (
 @Component({
   selector: 'main-map',
   templateUrl: './main-map.html',
-  styleUrls: ['./main-map.css'],
+  styleUrls: ['./main-map.scss'],
 })
 export class MainMap implements AfterViewInit {
   @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);

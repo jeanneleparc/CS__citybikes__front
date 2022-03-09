@@ -1,0 +1,17 @@
+export const colors = {
+  black: '#333',
+  blue: '#247DCE',
+  orange: '#ffa05b',
+  darkOrange: '#ff6b00',
+  white: '#FFFFFF',
+  red: '#cd2d2d',
+  darkRed: '#a82323',
+  yellow: '#f2d164',
+  darkYellow: '#e0b62b',
+  green: '#0e8c38',
+  darkGreen: '#0a6b2a',
+  boxShadow : 'rgba(0,0,0,0.26)',
+  boxShadowIcon: 'rgba(55,55,55,0.3)',
+  boxShadowSidePanel1 : 'rgba(60,64,67,0.3)',
+  boxShadowSidePanel2 : 'rgba(60,64,67,0.15)',
+} as const;

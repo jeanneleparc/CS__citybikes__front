@@ -5,6 +5,7 @@ import * as moment from 'moment-timezone';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import * as _ from 'lodash';
+import { colors } from 'src/colors';
 
 export interface IStatsAvgFillingRate {
   timeSlot: number;
@@ -14,7 +15,7 @@ export interface IStatsAvgFillingRate {
 @Component({
   selector: 'bar-chart',
   templateUrl: './bar-chart.html',
-  styleUrls: ['./bar-chart.css'],
+  styleUrls: ['./bar-chart.scss'],
 })
 export class BarChart implements OnInit {
   @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
@@ -65,9 +66,6 @@ export class BarChart implements OnInit {
   public barChartLegend = false;
   public barChartPlugins = [];
   public barChartData: ChartDataSets[] = [];
-  public colorDarkOrange: string = '#ff6b00';
-  public colorOrange: string = '#ffa05b';
-  public colorBlue: string = '#247dce';
 
   public $loading = new BehaviorSubject<boolean>(false);
 
@@ -99,12 +97,12 @@ export class BarChart implements OnInit {
               Math.round(element.avgFillingRate * 100)
             );
             if (element.timeSlot !== this.hour) {
-              backgroundColorTab.push(this.colorOrange);
-              borderColorTab.push(this.colorOrange);
+              backgroundColorTab.push(colors.orange);
+              borderColorTab.push(colors.orange);
               return;
             }
-            backgroundColorTab.push(this.colorDarkOrange);
-            borderColorTab.push(this.colorDarkOrange);
+            backgroundColorTab.push(colors.darkOrange);
+            borderColorTab.push(colors.darkOrange);
           });
           this.barChartData = [
             {
@@ -112,8 +110,8 @@ export class BarChart implements OnInit {
               label: 'Average Filling Rate',
               backgroundColor: backgroundColorTab,
               borderColor: borderColorTab,
-              hoverBackgroundColor: this.colorBlue,
-              hoverBorderColor: this.colorBlue,
+              hoverBackgroundColor: colors.blue,
+              hoverBorderColor: colors.blue,
             },
           ];
           this.$loading.next(false);
