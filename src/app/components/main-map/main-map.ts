@@ -14,12 +14,12 @@ import {
 const determineColorAccordingToFillingRate = (
   fillingRate: number
 ): { color: string; borderColor: string } => {
-  if (fillingRate < 0.2 && fillingRate >= 0) {
+  if (fillingRate < 20 && fillingRate >= 0) {
     return {
       color: colors.red,
       borderColor: colors.darkRed,
     };
-  } else if (fillingRate >= 0.2 && fillingRate < 0.55) {
+  } else if (fillingRate >= 20 && fillingRate < 55) {
     return {
       color: colors.yellow,
       borderColor: colors.darkYellow,
@@ -153,9 +153,9 @@ export class MainMap implements AfterViewInit {
             element.stationId === station.id
         );
         const fillingRate = stationStatistic?.fillingRate ?? -1;
-        const { color, borderColor } =
-          determineColorAccordingToFillingRate(fillingRate);
         if (fillingRate !== -1) {
+          const { color, borderColor } =
+            determineColorAccordingToFillingRate(fillingRate);
           marker = L.marker([latitude, longitude], {
             icon: createColoredMarker(
               color,

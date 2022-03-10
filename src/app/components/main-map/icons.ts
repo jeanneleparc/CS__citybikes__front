@@ -22,11 +22,9 @@ function getColoredMarker(
     ${
       !isStatistics
         ? `background-color: ${color};`
-        : `background: linear-gradient(315deg, ${color} 0%, ${color} ${
-            fillingRate * 100
-          }%,${colors.white} ${fillingRate * 100 + 1}%, ${
+        : `background: linear-gradient(315deg, ${color} 0%, ${color} ${fillingRate}%,${
             colors.white
-          } 100%); \ 
+          } ${fillingRate + 1}%, ${colors.white} 100%); \ 
         box-shadow : 5px 4px 5px 0px ${colors.boxShadowIcon};`
     }\
     ${!isShifted ? `transform: rotate(45deg);` : ``} \

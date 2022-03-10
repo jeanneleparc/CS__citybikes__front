@@ -64,7 +64,7 @@ export class AppComponent implements OnInit {
   // Nav bar logic
   changeTab(tab: string) {
     this.currentTab = tab;
-    if (tab === 'stats') {
+    if (tab === 'stats-map') {
       this.$isStatistics.next(true);
     } else {
       this.$isStatistics.next(false);
