@@ -11,7 +11,6 @@ export class MainSidePanel implements OnInit {
   @Input() loading: boolean = false;
   sidePanel: any;
   sidePanelIsOpen: boolean = false;
-  prevSelectedStation: any = {};
 
   constructor() {}
 
@@ -25,19 +24,11 @@ export class MainSidePanel implements OnInit {
   manageSelectedStation(selectedStation: any) {
     // if selected station is empty, close sidePanel
     if (!selectedStation || !selectedStation.id) {
-      this.closeSidePanel();
+      this.sidePanel.style.width = '0';
+      this.sidePanelIsOpen = false;
       return;
     }
-    // if selected station is the same than before, close panel if it is opened, otherwise open it
-    if (selectedStation == this.prevSelectedStation) {
-      if (this.sidePanelIsOpen) this.closeSidePanel();
-      else this.openSidePanel();
-    }
-    // if selected station is different, open panel if it is not opened yet
-    else {
-      this.prevSelectedStation = selectedStation;
-      if (!this.sidePanelIsOpen) this.openSidePanel();
-    }
+    this.openSidePanel();
   }
 
   openSidePanel() {
@@ -48,9 +39,10 @@ export class MainSidePanel implements OnInit {
   public closeSidePanel() {
     this.sidePanel.style.width = '0';
     this.sidePanelIsOpen = false;
+    this.$selectedStation.next(null);
   }
 
   isStationActive(station: any) {
-    return station.station_status == 'active';
+    return station?.station_status == 'active';
   }
 }
