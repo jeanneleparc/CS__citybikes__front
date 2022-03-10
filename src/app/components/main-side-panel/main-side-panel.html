@@ -1,11 +1,11 @@
 <div id="mySidepanel" class="sidepanel">
-  <div class="sidepannel-header">
+  <div>
     <div class="sidepannel-title">
     <a href="javascript:void(0)" class="close-btn" (click)="closeSidePanel()">&times;</a>
     <h1>{{ ($selectedStation | async)?.name }}</h1>
     </div>
   </div>
-  <div *ngIf="!loading; else spinner" class="sidepannel-container">
+  <div *ngIf="!loading; else spinner" class="sidepannel-container mt-4">
     <div *ngIf="isStationActive($selectedStation | async); else inactiveStationcontainer" class="active-station-container">
       <div class="text-with-icon">
         <div class="icon">
