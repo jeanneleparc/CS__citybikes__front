@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'stats-ranking',
   templateUrl: './stats-ranking.html',
-  styleUrls: ['./stats-ranking.css'],
+  styleUrls: ['./stats-ranking.scss'],
 })
 export class StatsRanking implements OnInit {
   topStations: any[] = [];

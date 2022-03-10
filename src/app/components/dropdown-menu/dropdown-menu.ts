@@ -16,7 +16,7 @@ export interface MenuItem {
 @Component({
   selector: 'dropdown-menu',
   templateUrl: './dropdown-menu.html',
-  styleUrls: ['./dropdown-menu.css'],
+  styleUrls: ['./dropdown-menu.scss'],
 })
 export class DropdownMenuComponent {
   @Input() public menuItems: Array<MenuItem> = [];
