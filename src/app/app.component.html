@@ -10,6 +10,16 @@
       <li *ngFor="let tab of tabs" class="nav-item" [class.active]="currentTab == tab.name">
         <span class="nav-link" (click)="changeTab(tab.name)">{{ tab.title }}</span>
       </li>
+      <li class="nav-item dropdown" [class.active]="currentTab != 'main'">
+        <a class="nav-link dropdown-toggle" href="#" id="statistics" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Statistics
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="statistics">
+          <li *ngFor="let tab of statsTabs">
+            <a class="dropdown-item" (click)="changeTab(tab.name)">{{ tab.title }}</a>
+          </li>
+        </ul>
+      </li>
     </ul>
     <div *ngIf="currentTab == 'main'" class="d-flex justify-content-start align-items-center">
       <span class="align-middle" *ngIf="($lastUpdatedTime | async); else spinner" class="text-white">Last updated at {{ $lastUpdatedTime | async }}</span>
@@ -18,6 +28,7 @@
   </div>
 </nav>
 
+<!-- Main -->
 <div class="main position-relative">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
@@ -28,7 +39,8 @@
                 ($selectedStationChange)="changeSelectedStation($event)"></main-map>
       <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
     </div>
-    <div *ngSwitchCase="'stats'">
+
+    <div *ngSwitchCase="'stats-map'">
       <div class="d-flex justify-content-around timeslot-weekday-scroll">
         <div class="d-flex justify-content-around weekday-scroll">
           <select-scroll [values]="days" 
@@ -47,15 +59,18 @@
                 [$isStatistics]="$isStatistics" 
                 ($selectedStationChange)="changeSelectedStation($event)"></main-map>
     </div>
-  </div>
-  
-  <!-- Footer -->
-  <footer>
-      Developped by CentraleSupélec students : Bouyssel Camille, Le Parc Jeanne, Ni Clara.
-  </footer>
 
+    <div *ngSwitchCase="'stats-ranking'" class="content">
+      <stats-ranking></stats-ranking>
+    </div>
+  </div>
   <router-outlet></router-outlet>
 </div>
+
+<!-- Footer -->
+<footer>
+  Developped by CentraleSupélec students : Bouyssel Camille, Le Parc Jeanne, Ni Clara.
+</footer>
 
 <ng-template #spinner>
   <div class="spinner-border" role="status">

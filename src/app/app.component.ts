@@ -21,9 +21,15 @@ export class AppComponent implements OnInit {
       name: 'main',
       title: 'Home',
     },
+  ];
+  statsTabs: any[] = [
     {
-      name: 'stats',
-      title: 'Statistics',
+      name: 'stats-map',
+      title: 'Repartition of the bikes',
+    },
+    {
+      name: 'stats-ranking',
+      title: 'Ranking of the stations',
     },
   ];
   currentTab: string = 'main';
@@ -58,7 +64,7 @@ export class AppComponent implements OnInit {
   // Nav bar logic
   changeTab(tab: string) {
     this.currentTab = tab;
-    if (tab === 'stats') {
+    if (tab === 'stats-map') {
       this.$isStatistics.next(true);
     } else {
       this.$isStatistics.next(false);

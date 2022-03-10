@@ -34,4 +34,11 @@ export class DataService {
       { weekDay: day, timeSlot: timeSlot }
     );
   }
+
+  public sendPostRankingStationRequest(timeSlot: Number, weekDay: String) {
+    return this.httpClient.post<any>(`${this.REST_API_SERVER}/stats_ranking`, {
+      timeSlot,
+      weekDay,
+    });
+  }
 }

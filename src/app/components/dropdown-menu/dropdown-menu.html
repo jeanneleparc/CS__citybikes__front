@@ -1,0 +1,9 @@
+<a *ngFor="let item of menuItems;let i = index" (click)="$event.stopPropagation()">
+  <span class="dropdown-menu-container">
+    <span class="dropdown-menu-item">{{ item.text }}</span>
+  </span>
+  <div class="submenu-container">
+    <span *ngFor="let sub of item.subMenu;let j = index" class="submenu-item"
+      (click)="onClick($event, i, j)"> {{ sub.text }}</span> 
+  </div>
+</a>
