@@ -201,7 +201,6 @@ export class MainMap implements AfterViewInit {
       if (!this.stationIsActive(this.prevSelectedStation)) {
         this.prevSelectedMarker.setIcon(iconRed);
       } else {
-        console.log('blue');
         this.prevSelectedMarker.setIcon(iconBlue);
       }
     }
