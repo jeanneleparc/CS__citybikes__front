@@ -46,6 +46,9 @@ export class StatsRanking implements OnInit {
     },
   ];
 
+  defaultTimeSlot: number = 8;
+  defaultWeekday: string = this.weekdays[3];
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -57,8 +60,8 @@ export class StatsRanking implements OnInit {
         this.loading = true;
         this.dataService
           .sendPostRankingStationRequest(
-            this.selectedTimeSlot?.value || 8,
-            this.selectedDay || 'Wednesday'
+            this.selectedTimeSlot?.value || this.defaultTimeSlot,
+            this.selectedDay || this.defaultWeekday
           )
           .subscribe((data) => {
             this.topStations = data;
