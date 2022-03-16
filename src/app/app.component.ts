@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
     moment().startOf('weeks').add(i, 'days').format('ddd')
   );
   daysFull: string[] = [...Array(7).keys()].map((i) =>
-  moment().startOf('weeks').add(i, 'days').format('dddd')
+    moment().startOf('weeks').add(i, 'days').format('dddd')
   );
   timeslots: string[] = [...Array(24).keys()].map(
     (i) =>
