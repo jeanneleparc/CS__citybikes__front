@@ -38,11 +38,14 @@ export class AppComponent implements OnInit {
   $selectedDay: BehaviorSubject<string> = new BehaviorSubject('Monday');
   $selectedTimeSlot: BehaviorSubject<number> = new BehaviorSubject(0);
   days: string[] = [...Array(7).keys()].map((i) =>
-    moment().startOf('weeks').add(i, 'days').format('dddd')
+    moment().startOf('weeks').add(i, 'days').format('ddd')
+  );
+  daysFull: string[] = [...Array(7).keys()].map((i) =>
+  moment().startOf('weeks').add(i, 'days').format('dddd')
   );
   timeslots: string[] = [...Array(24).keys()].map(
     (i) =>
-      `${moment().startOf('day').add(i, 'hours').format('hh a')} - ${moment()
+      `${moment().startOf('day').add(i, 'hours').format('hh')} - ${moment()
         .startOf('day')
         .add(i + 1, 'hours')
         .format('hh a')}`
@@ -139,7 +142,7 @@ export class AppComponent implements OnInit {
   }
 
   changeSelectedDay(dayId: number): void {
-    this.$selectedDay.next(this.days[dayId]);
+    this.$selectedDay.next(this.daysFull[dayId]);
   }
 
   changeSelectedTimeSlot(timeslotId: number): void {

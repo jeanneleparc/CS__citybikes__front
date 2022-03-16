@@ -41,14 +41,47 @@ footer {
   right: 0px;
   z-index: 10000;
   border-radius: 25px;
-  width: 250px;
+  width: 200px;
   box-shadow: 5px 5px 15px 5px colors.$box-shadow;
 }
 
 .weekday-scroll {
-  width: 100px
+  width: 60px;
 }
 
 .timeslot-scroll {
-  width: 140px
+  width: 130px;
+}
+
+.radio-toolbar {
+  background-color: transparent;
+  border-radius: 25px;
+  flex-direction: column;
+  height: 112px;
+  margin-top: 16px;
+  position: fixed;
+  right: 220px;
+  width: auto;
+  z-index: 10000;
+}
+
+.radio-toolbar label {
+    background-color: colors.$white;
+    border: 2px solid colors.$blue;
+    border-radius: 25px;
+    box-shadow: 5px 5px 15px 5px colors.$box-shadow;
+    color: colors.$blue;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.radio-toolbar label:hover {
+  background-color: colors.$blue;
+  color: colors.$white;
+}
+
+.radio-toolbar input[type="radio"]:checked + label {
+  background-color:colors.$blue;
+  border: 2px solid colors.$white;
+  color: colors.$white;
 }
