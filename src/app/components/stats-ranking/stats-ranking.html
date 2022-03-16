@@ -31,7 +31,7 @@
       <tbody *ngIf="!loading">
         <tr *ngFor="let station of topStations; let index = index;">
           <th>{{ index+1 }}</th>
-          <th>{{ station.stationName }}</th>
+          <th>{{ station.name }}</th>
           <td>{{ station.fillingRate }} %</td>
         </tr>
       </tbody>
