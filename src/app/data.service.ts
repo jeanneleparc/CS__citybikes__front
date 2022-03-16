@@ -30,7 +30,7 @@ export class DataService {
     day: String
   ) {
     return this.httpClient.post<any>(
-      `${this.REST_API_SERVER}/stats_avg_filling_rate_by_timeslot`,
+      `${this.REST_API_SERVER}/stats_by_timeslot`,
       { weekDay: day, timeSlot: timeSlot }
     );
   }
