@@ -1,71 +1,17 @@
 import { Component, AfterViewInit, Output, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import { colors } from 'src/colors';
+
 import {
   iconBlue,
   iconYellow,
   iconRed,
-  iconBlueCluster,
-  createColoredMarker,
+  createIconCluster,
+  createColorIconFromFillingRate,
 } from 'src/app/components/main-map/icons';
-import { filter } from 'rxjs/operators';
-
-const determineColorAccordingToFillingRate = (
-  fillingRate: number
-): { color: string; borderColor: string } => {
-  if (fillingRate < 20 && fillingRate >= 0) {
-    return {
-      color: colors.red,
-      borderColor: colors.darkRed,
-    };
-  } else if (fillingRate >= 20 && fillingRate < 55) {
-    return {
-      color: colors.yellow,
-      borderColor: colors.darkYellow,
-    };
-  }
-  return {
-    color: colors.green,
-    borderColor: colors.darkGreen,
-  };
-};
-
-const createIconCluster = (
-  isStatistics: boolean,
-  cluster: L.MarkerCluster
-): L.Icon => {
-  if (!isStatistics) {
-    return iconBlueCluster;
-  }
-  const childMarkers = cluster.getAllChildMarkers();
-  const { rates, compteur } = childMarkers.reduce(
-    (previousValue, currentValue) => {
-      // @ts-ignore: Unreachable code error
-      if (currentValue.fillingRate !== -1) {
-        return {
-          // @ts-ignore: Unreachable code error
-          rates: currentValue.fillingRate + previousValue.rates,
-          compteur: previousValue.compteur + 1,
-        };
-      }
-      return previousValue;
-    },
-    { rates: 0, compteur: 0 }
-  );
-  const meanClusterFillingRate = rates / compteur;
-  const { color, borderColor } = determineColorAccordingToFillingRate(
-    meanClusterFillingRate
-  );
-  return createColoredMarker(
-    color,
-    borderColor,
-    meanClusterFillingRate,
-    true,
-    true
-  );
-};
+import { IStation, IStationStat } from 'src/app/interfaces';
 
 @Component({
   selector: 'main-map',
@@ -76,7 +22,6 @@ export class MainMap implements AfterViewInit {
   @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   @Input() $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
-  @Input() $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Output() $selectedStationChange: BehaviorSubject<any> = new BehaviorSubject(
     {}
   );
@@ -90,9 +35,6 @@ export class MainMap implements AfterViewInit {
   ngAfterViewInit(): void {
     this.initMap();
     this.$stations.subscribe(() => {
-      this.refreshData();
-    });
-    this.$stationsStatistics.subscribe(() => {
       this.refreshData();
     });
   }
@@ -125,6 +67,8 @@ export class MainMap implements AfterViewInit {
 
   addMarkers(stations: any[]): void {
     const isStatistics = this.$isStatistics.value;
+
+    // add clusters
     this.markers = L.markerClusterGroup({
       spiderfyOnMaxZoom: false,
       showCoverageOnHover: false,
@@ -134,48 +78,13 @@ export class MainMap implements AfterViewInit {
         return createIconCluster(isStatistics, cluster);
       },
     });
+
+    // add markers
     for (const station of stations) {
-      const { latitude, longitude } = station;
-      // manage the selected station
-      if (!this.$isStatistics.value) {
-        var marker = L.marker([latitude, longitude], { icon: iconBlue });
-        if (!this.stationIsActive(station)) {
-          marker = L.marker([latitude, longitude], { icon: iconRed });
-        }
-
-        marker.on('click', (event) => {
-          this.manageSelectedMarker(station, event.target);
-        });
-
-        if (this.$selectedStation.getValue()?.id == station.id) {
-          marker = L.marker([latitude, longitude], { icon: iconYellow });
-          this.prevSelectedMarker = marker;
-        }
-        this.markers.addLayer(marker);
+      if (!isStatistics) {
+        this.addDefaultMarker(station);
       } else {
-        const listStations: { stationId: number; fillingRate: number }[] =
-          this.$stationsStatistics.getValue();
-        const stationStatistic = listStations.find(
-          (element: { stationId: number; fillingRate: number }) =>
-            element.stationId === station.id
-        );
-        const fillingRate = stationStatistic?.fillingRate ?? -1;
-        if (fillingRate !== -1) {
-          const { color, borderColor } =
-            determineColorAccordingToFillingRate(fillingRate);
-          marker = L.marker([latitude, longitude], {
-            icon: createColoredMarker(
-              color,
-              borderColor,
-              fillingRate,
-              false,
-              true
-            ),
-          });
-          // @ts-ignore: Unreachable code error
-          marker.fillingRate = fillingRate;
-          this.markers.addLayer(marker);
-        }
+        this.addStatMarker(station);
       }
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
     }
@@ -188,7 +97,38 @@ export class MainMap implements AfterViewInit {
     this.map.addLayer(this.markers);
   }
 
-  manageSelectedMarker(station: any, newSelectedMarker: any) {
+  addDefaultMarker(station: IStation) {
+    const { latitude, longitude } = station;
+    var marker = L.marker([latitude, longitude], { icon: iconBlue });
+    if (!this.stationIsActive(station)) {
+      marker = L.marker([latitude, longitude], { icon: iconRed });
+    }
+
+    marker.on('click', (event) => {
+      this.manageSelectedMarker(station, event.target);
+    });
+
+    if (this.$selectedStation.getValue()?.id == station.id) {
+      marker = L.marker([latitude, longitude], { icon: iconYellow });
+      this.prevSelectedMarker = marker;
+    }
+    this.markers.addLayer(marker);
+  }
+
+  addStatMarker(station: IStationStat) {
+    const { latitude, longitude } = station;
+    const fillingRate = station?.fillingRate ?? -1;
+    if (fillingRate !== -1) {
+      var marker = L.marker([latitude, longitude], {
+        icon: createColorIconFromFillingRate(fillingRate),
+      });
+      // @ts-ignore: Unreachable code error
+      marker.fillingRate = fillingRate;
+      this.markers.addLayer(marker);
+    }
+  }
+
+  manageSelectedMarker(station: IStation, newSelectedMarker: any) {
     newSelectedMarker.setIcon(iconYellow);
     this.resetPrevMarker();
     this.$selectedStationChange.next(station);
@@ -206,7 +146,7 @@ export class MainMap implements AfterViewInit {
     }
   }
 
-  createMarkerPopup(station: any): string {
+  createMarkerPopup(station: IStation): string {
     return (
       `` +
       `<h6>Name: ${station.name}</h6>` +
@@ -215,7 +155,7 @@ export class MainMap implements AfterViewInit {
     );
   }
 
-  stationIsActive(station: any) {
+  stationIsActive(station: IStation) {
     return station?.station_status == 'active';
   }
 }

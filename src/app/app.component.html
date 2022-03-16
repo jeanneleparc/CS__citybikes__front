@@ -34,7 +34,6 @@
     <div *ngSwitchCase="'main'">
       <main-map [$stations]="$stations" 
                 [$selectedStation]="$selectedStation"
-                [$stationsStatistics]="$stationsStatistics"
                 [$isStatistics]="$isStatistics" 
                 ($selectedStationChange)="changeSelectedStation($event)"></main-map>
       <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
@@ -53,11 +52,8 @@
                          ($selectedValuesId)="changeSelectedTimeSlot($event)"></select-scroll>
         </div>
       </div>
-      <main-map [$stations]="$stations" 
-                [$selectedStation]="$selectedStation" 
-                [$stationsStatistics]="$stationsStatistics" 
-                [$isStatistics]="$isStatistics" 
-                ($selectedStationChange)="changeSelectedStation($event)"></main-map>
+      <main-map [$stations]="$stationsStatistics"
+                [$isStatistics]="$isStatistics"></main-map>
     </div>
 
     <div *ngSwitchCase="'stats-ranking'" class="content">
