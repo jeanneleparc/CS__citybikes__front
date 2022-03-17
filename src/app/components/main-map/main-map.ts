@@ -10,6 +10,7 @@ import {
   iconRed,
   createIconCluster,
   createColorIconFromFillingRate,
+  createColorIconFromBikeNumber,
 } from 'src/app/components/main-map/icons';
 import { IStation, IStationStat } from 'src/app/interfaces';
 
@@ -21,6 +22,7 @@ import { IStation, IStationStat } from 'src/app/interfaces';
 export class MainMap implements AfterViewInit {
   @Input() $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  @Input() $selectedAnalytic: BehaviorSubject<string> = new BehaviorSubject('');
   @Input() $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
   @Output() $selectedStationChange: BehaviorSubject<any> = new BehaviorSubject(
     {}
@@ -67,6 +69,7 @@ export class MainMap implements AfterViewInit {
 
   addMarkers(stations: any[]): void {
     const isStatistics = this.$isStatistics.value;
+    const selectedAnalytic = this.$selectedAnalytic.value;
 
     // add clusters
     this.markers = L.markerClusterGroup({
@@ -75,7 +78,7 @@ export class MainMap implements AfterViewInit {
       zoomToBoundsOnClick: true,
       maxClusterRadius: 50,
       iconCreateFunction(cluster) {
-        return createIconCluster(isStatistics, cluster);
+        return createIconCluster(isStatistics, selectedAnalytic, cluster);
       },
     });
 
@@ -116,15 +119,28 @@ export class MainMap implements AfterViewInit {
   }
 
   addStatMarker(station: IStationStat) {
+    const selectedAnalytic = this.$selectedAnalytic.value;
     const { latitude, longitude } = station;
-    const fillingRate = station?.fillingRate ?? -1;
-    if (fillingRate !== -1) {
-      var marker = L.marker([latitude, longitude], {
-        icon: createColorIconFromFillingRate(fillingRate),
-      });
-      // @ts-ignore: Unreachable code error
-      marker.fillingRate = fillingRate;
-      this.markers.addLayer(marker);
+    if (selectedAnalytic === 'fillingRate') {
+      const fillingRate = station?.fillingRate ?? -1;
+      if (fillingRate !== -1) {
+        var marker = L.marker([latitude, longitude], {
+          icon: createColorIconFromFillingRate(fillingRate),
+        });
+        // @ts-ignore: Unreachable code error
+        marker.fillingRate = fillingRate;
+        this.markers.addLayer(marker);
+      }
+    } else {
+      const avgBikesNb = station?.avgBikesNb ?? -1;
+      if (avgBikesNb !== -1) {
+        var marker = L.marker([latitude, longitude], {
+          icon: createColorIconFromBikeNumber(avgBikesNb),
+        });
+        // @ts-ignore: Unreachable code error
+        marker.avgBikesNb = avgBikesNb;
+        this.markers.addLayer(marker);
+      }
     }
   }
 

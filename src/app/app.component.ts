@@ -15,6 +15,9 @@ export class AppComponent implements OnInit {
   $isStatistics: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   $lastUpdatedTime: BehaviorSubject<string> = new BehaviorSubject('');
   $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  $selectedAnalytic: BehaviorSubject<string> = new BehaviorSubject(
+    'avgNbBikes'
+  );
   loading: boolean = false;
   tabs: any[] = [
     {
@@ -57,8 +60,6 @@ export class AppComponent implements OnInit {
     10
   );
 
-  analyticSelected: string = 'avgNbBikes';
-
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -74,11 +75,6 @@ export class AppComponent implements OnInit {
     } else {
       this.$isStatistics.next(false);
     }
-  }
-
-  onAnalyticChange(analytic: string) {
-    this.analyticSelected = analytic;
-    console.log(this.analyticSelected);
   }
 
   autoRefreshData(): void {
@@ -134,7 +130,11 @@ export class AppComponent implements OnInit {
 
   // Statistics functions
   refreshDataStatistics(): void {
-    combineLatest([this.$selectedTimeSlot, this.$selectedDay])
+    combineLatest([
+      this.$selectedTimeSlot,
+      this.$selectedDay,
+      this.$selectedAnalytic,
+    ])
       .pipe(
         switchMap(([timeslot, day]) =>
           this.dataService.sendPostAvgFillingRateByTimeslotByDayRequest(
@@ -146,6 +146,10 @@ export class AppComponent implements OnInit {
       .subscribe((result) => {
         this.$stationsStatistics.next(result);
       });
+  }
+
+  changeSelectedAnalytic(analytic: string): void {
+    this.$selectedAnalytic.next(analytic);
   }
 
   changeSelectedDay(dayId: number): void {
