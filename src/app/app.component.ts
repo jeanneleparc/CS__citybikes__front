@@ -57,6 +57,8 @@ export class AppComponent implements OnInit {
     10
   );
 
+  analyticSelected: string = 'avgNbBikes';
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -72,6 +74,11 @@ export class AppComponent implements OnInit {
     } else {
       this.$isStatistics.next(false);
     }
+  }
+
+  onAnalyticChange(analytic: string) {
+    this.analyticSelected = analytic;
+    console.log(this.analyticSelected);
   }
 
   autoRefreshData(): void {
