@@ -53,7 +53,7 @@ footer {
   width: 130px;
 }
 
-.radio-toolbar {
+.radio-analytic {
   background-color: transparent;
   border-radius: 25px;
   flex-direction: column;
@@ -65,7 +65,7 @@ footer {
   z-index: 10000;
 }
 
-.radio-toolbar label {
+.radio-analytic label {
     background-color: colors.$white;
     border: 2px solid colors.$blue;
     border-radius: 25px;
@@ -75,12 +75,12 @@ footer {
     margin-bottom: 5px;
 }
 
-.radio-toolbar label:hover {
+.radio-analytic label:hover {
   background-color: colors.$blue;
   color: colors.$white;
 }
 
-.radio-toolbar input[type="radio"]:checked + label {
+.radio-analytic input[type="radio"]:checked + label {
   background-color:colors.$blue;
   border: 2px solid colors.$white;
   color: colors.$white;

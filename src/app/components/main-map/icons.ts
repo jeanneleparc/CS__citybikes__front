@@ -135,22 +135,23 @@ export function createIconCluster(
   const childMarkers = cluster.getAllChildMarkers();
   const { rates, compteur, bikeNb } = childMarkers.reduce(
     (previousValue, currentValue) => {
-      // @ts-ignore: Unreachable code error
       return {
-        // @ts-ignore: Unreachable code error
         rates:
+          // @ts-ignore: Unreachable code error
           currentValue.fillingRate !== -1
-            ? currentValue.fillingRate + previousValue.rates
+            ? // @ts-ignore: Unreachable code error
+              currentValue.fillingRate + previousValue.rates
             : previousValue.rates,
-        // @ts-ignore: Unreachable code error
         compteur:
+          // @ts-ignore: Unreachable code error
           currentValue.fillingRate !== -1
             ? previousValue.compteur + 1
             : previousValue.compteur,
-        // @ts-ignore: Unreachable code error
         bikeNb:
+          // @ts-ignore: Unreachable code error
           currentValue.avgBikesNb !== -1
-            ? previousValue.bikeNb + currentValue.avgBikesNb
+            ? // @ts-ignore: Unreachable code error
+              previousValue.bikeNb + currentValue.avgBikesNb
             : previousValue.bikeNb,
       };
     },

@@ -40,13 +40,13 @@
     </div>
 
     <div *ngSwitchCase="'stats-map'">
-      <div class="d-flex radio-toolbar">
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked (change)="changeSelectedAnalytic('avgNbBikes')"/>
-        <label class="btn" for="btnradio1">
+      <div class="d-flex radio-analytic">
+        <input type="radio" class="btn-check" name="radioAnalytic" id="radioAnalytic1" autocomplete="off" checked (change)="changeSelectedAnalytic('avgNbBikes')"/>
+        <label class="btn" for="radioAnalytic1">
           <i class="fas fa-bicycle fa-s"></i>
         </label>     
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" (change)="changeSelectedAnalytic('fillingRate')"/>
-        <label class="btn" for="btnradio2">
+        <input type="radio" class="btn-check" name="radioAnalytic" id="radioAnalytic2" autocomplete="off" (change)="changeSelectedAnalytic('fillingRate')"/>
+        <label class="btn" for="radioAnalytic2">
           <i class="fas fa-percent fa-xs"></i>
         </label>
       </div>
