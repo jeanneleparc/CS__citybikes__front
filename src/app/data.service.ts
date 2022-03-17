@@ -41,4 +41,8 @@ export class DataService {
       weekDay,
     });
   }
+
+  public getAddressAutocomplete(q: string) {
+    return this.httpClient.post<any>(`${this.REST_API_SERVER}/geocode`, { q });
+  }
 }

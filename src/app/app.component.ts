@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment-timezone';
 import { BehaviorSubject, combineLatest, timer } from 'rxjs';
 import { switchMap, mergeMap } from 'rxjs/operators';
@@ -36,6 +37,13 @@ export class AppComponent implements OnInit {
     },
   ];
   currentTab: string = 'main';
+
+  // Searbar variables
+  form = new FormGroup({
+    q: new FormControl(''),
+  });
+  suggestions: any = [];
+  noResults: boolean = false;
 
   // Statistics variables
   $selectedDay: BehaviorSubject<string> = new BehaviorSubject('Monday');
@@ -158,5 +166,18 @@ export class AppComponent implements OnInit {
 
   changeSelectedTimeSlot(timeslotId: number): void {
     this.$selectedTimeSlot.next(timeslotId);
+  }
+
+  searchBarSubmit() {
+    this.dataService
+      .getAddressAutocomplete(this.form.value.q)
+      .subscribe((data: any) => {
+        this.form.reset(this.form.value);
+        this.noResults = false;
+        this.suggestions = data;
+        if (this.suggestions.length == 0) {
+          this.noResults = true;
+        }
+      });
   }
 }

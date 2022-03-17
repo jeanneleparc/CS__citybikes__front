@@ -32,6 +32,24 @@
 <div class="main position-relative">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
+      <div class="d-flex justify-content-center mt-2 search-bar">
+        <form [formGroup]="form" (ngSubmit)="searchBarSubmit()">
+          <div class="input-group">
+            <input class="form-control" type="text" formControlName="q" placeholder="Search" aria-label="Search">
+            <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
+          </div>
+          <div class="list-group">
+            <button *ngFor="let s of suggestions" type="button" class="list-group-item list-group-item-action text-start">
+              {{ s.label }}
+            </button>
+            <button *ngIf="noResults && !form.controls['q'].dirty" type="button" class="list-group-item list-group-item-action disabled text-start">
+              No results
+            </button>
+          </div>
+        </form>
+        
+        
+      </div>
       <main-map [$stations]="$stations" 
                 [$selectedStation]="$selectedStation"
                 [$isStatistics]="$isStatistics" 

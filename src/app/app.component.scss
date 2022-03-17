@@ -85,3 +85,15 @@ footer {
   border: 2px solid colors.$white;
   color: colors.$white;
 }
+
+.search-bar {
+  position: fixed;
+  z-index: 999;
+  border-radius: 25px;
+  text-align: center;
+  width: 100%;
+}
+
+form {
+  width: 75%;
+}
