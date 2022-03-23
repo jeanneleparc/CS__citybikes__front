@@ -11,9 +11,12 @@
         <div class="icon">
           <i class="fas fa-bicycle fa-2x"></i>
         </div>
-        <p>{{ ($selectedStation | async)?.num_bikes_available }} available bikes</p>
+        <div class="text-ebikes">
+          <p>{{ ($selectedStation | async)?.num_bikes_available }} available bikes</p>
+          <p>(including {{ ($selectedStation | async)?.num_ebikes }} e-bikes)</p>
+        </div>
       </div>
-      <div class="text-with-icon">
+      <div class="text-with-icon mt-2">
         <div class="icon">
           <i class="fas fa-parking fa-2x"></i>
         </div>
