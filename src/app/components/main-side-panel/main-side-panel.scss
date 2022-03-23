@@ -78,3 +78,28 @@
   width: 100%;
   height: 30%;
 }
+
+.all-bars{
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.all-bars .barre{
+  width: var(--taille);
+  background-color: var(--main-color);
+  height: 15px;
+}
+
+.all-bars .barre:first-child{
+  width: var(--taille);
+  background-color: var(--main-color);
+  height: 15px;
+  border-radius: 25px 0px 0px 25px;
+}
+
+.all-bars .barre:last-child{
+  width: var(--taille);
+  background-color: var(--main-color);
+  height: 15px;
+  border-radius: 0px 25px 25px 0px;
+}

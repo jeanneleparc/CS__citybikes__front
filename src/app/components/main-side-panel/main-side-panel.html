@@ -7,6 +7,23 @@
   </div>
   <div *ngIf="!loading; else spinner" class="sidepannel-container mt-4">
     <div *ngIf="isStationActive($selectedStation | async); else inactiveStationcontainer" class="active-station-container">
+      <div class="all-bars">
+        <div *ngIf="(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)!==0" 
+              class="barre" 
+              style="--taille: {{(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greenBar}};"></div>
+        <div *ngIf="($selectedStation | async)?.num_ebikes !== 0" 
+              class="barre" 
+              style="--taille: {{($selectedStation | async)?.num_ebikes/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.blueBar}};"></div>
+        <div *ngIf="($selectedStation | async)?.num_docks_available !== 0" 
+              class="barre" 
+              style="--taille: {{($selectedStation | async)?.num_docks_available/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greyBar}};"></div>
+        <div *ngIf="($selectedStation | async)?.num_docks_disabled !== 0" 
+              class="barre"
+              style="--taille: {{($selectedStation | async)?.num_docks_disabled/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};"></div>
+        <div *ngIf="($selectedStation | async)?.num_bikes_disabled !== 0" 
+              class="barre" 
+              style="--taille: {{($selectedStation | async)?.num_bikes_disabled/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};"></div>
+      </div>
       <div class="text-with-icon">
         <div class="icon">
           <i class="fas fa-bicycle fa-2x"></i>

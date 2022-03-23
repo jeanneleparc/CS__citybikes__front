@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { colors } from 'src/colors';
 
 @Component({
   selector: 'main-side-panel',
@@ -11,7 +12,7 @@ export class MainSidePanel implements OnInit {
   @Input() loading: boolean = false;
   sidePanel: any;
   sidePanelIsOpen: boolean = false;
-
+  colors: any = colors;
   constructor() {}
 
   ngOnInit(): void {
