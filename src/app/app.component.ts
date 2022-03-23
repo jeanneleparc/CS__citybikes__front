@@ -11,7 +11,7 @@ import { DataService } from './data.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
+  $stations: BehaviorSubject<any> = new BehaviorSubject([]);
   $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
   $isStatistics: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   $lastUpdatedTime: BehaviorSubject<string> = new BehaviorSubject('');
@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
   });
   suggestions: any = [];
   noResults: boolean = false;
+  $dynamicSelect: BehaviorSubject<any> = new BehaviorSubject({});
 
   // Statistics variables
   $selectedDay: BehaviorSubject<string> = new BehaviorSubject('Monday');
@@ -168,6 +169,8 @@ export class AppComponent implements OnInit {
     this.$selectedTimeSlot.next(timeslotId);
   }
 
+  // Search Bar functions
+
   searchBarSubmit() {
     this.dataService
       .getAddressAutocomplete(this.form.value.q)
@@ -179,5 +182,24 @@ export class AppComponent implements OnInit {
           this.noResults = true;
         }
       });
+  }
+
+  lookForNearestStation(location: {
+    label: string;
+    coordinates: { lat: number; long: number };
+  }) {
+    const stations = this.$stations.getValue();
+    const stationsWithDistance = stations.map((station: any) => ({
+      distance:
+        (location.coordinates.lat - station.latitude) ** 2 +
+        (location.coordinates.long - station.longitude) ** 2,
+      station,
+    }));
+    const nearestStation = stationsWithDistance.reduce(
+      (prev: any, curr: any) => {
+        return prev.distance < curr.distance ? prev : curr;
+      }
+    );
+    this.$dynamicSelect.next(nearestStation.station);
   }
 }
