@@ -34,19 +34,27 @@
     <div *ngSwitchCase="'main'">
 
       <!-- Search Bar -->
-      <div class="d-flex justify-content-center mt-2 search-bar">
-        <form [formGroup]="form" (ngSubmit)="searchBarSubmit()">
+      <div class="d-flex justify-content-start mt-2 search-bar">
+        <form [formGroup]="form" 
+              (ngSubmit)="searchBarSubmit()" 
+              class="offset-1 col-sm-11 col-md-6">
           <div class="input-group">
-            <input class="form-control" type="text" formControlName="q" placeholder="Search" aria-label="Search">
+            <input class="form-control" 
+                   type="text" 
+                   formControlName="q" 
+                   placeholder="Find the nearest station" 
+                   aria-label="Search">
             <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
           </div>
           <div class="list-group">
-            <button *ngFor="let s of suggestions" 
+            <div *ngIf="!noResults && !form.controls['q'].dirty">
+              <button *ngFor="let s of suggestions" 
                     type="button" 
                     class="list-group-item list-group-item-action text-start"
-                    (click)="lookForNearestStation(s)">
-              {{ s.label }}
-            </button>
+                    (click)="selectSuggestion(s)">
+                {{ s.label }}
+              </button>
+            </div>
             <button *ngIf="noResults && !form.controls['q'].dirty" type="button" class="list-group-item list-group-item-action disabled text-start">
               No results
             </button>

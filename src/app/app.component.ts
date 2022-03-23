@@ -202,4 +202,13 @@ export class AppComponent implements OnInit {
     );
     this.$dynamicSelect.next(nearestStation.station);
   }
+
+  selectSuggestion(location: {
+    label: string;
+    coordinates: { lat: number; long: number };
+  }) {
+    this.form.controls['q'].markAsDirty();
+    this.form.setValue({ q: location.label });
+    this.lookForNearestStation(location);
+  }
 }

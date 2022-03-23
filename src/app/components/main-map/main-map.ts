@@ -187,8 +187,8 @@ export class MainMap implements AfterViewInit {
   }
 
   zoomOnStationSelected(marker: any) {
-    var latLngs = [marker.getLatLng()];
-    var markerBounds = L.latLngBounds(latLngs);
+    const latLngs = [marker.getLatLng()];
+    const markerBounds = L.latLngBounds(latLngs);
     this.map.fitBounds(markerBounds);
   }
 }
