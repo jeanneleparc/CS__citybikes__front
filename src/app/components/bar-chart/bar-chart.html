@@ -11,12 +11,10 @@
     </div>  
     <div class="div-title-chart"><p class='title-chart'>Average Filling Rate By Time Slot</p></div>
     <canvas baseChart 
-      [datasets]="barChartData"
-      [labels]="barChartLabels"
+      [data]="barChartData"
       [options]="barChartOptions"
-      [plugins]="barChartPlugins"
       [legend]="barChartLegend"
-      [chartType]="barChartType">
+      [type]="barChartType">
     </canvas>
   </div>
 </div>

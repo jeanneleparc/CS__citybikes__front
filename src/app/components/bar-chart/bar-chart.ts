@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { DataService } from 'src/app/data.service';
 import * as moment from 'moment-timezone';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label } from 'ng2-charts';
 import * as _ from 'lodash';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { BehaviorSubject } from 'rxjs';
+
+import { DataService } from 'src/app/data.service';
 import { colors } from 'src/colors';
 
 export interface IStatsAvgFillingRate {
@@ -19,6 +20,7 @@ export interface IStatsAvgFillingRate {
 })
 export class BarChart implements OnInit {
   @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   idStation!: number;
   date!: moment.Moment;
@@ -26,46 +28,29 @@ export class BarChart implements OnInit {
   hour!: number;
   statsAvgFillingRate: IStatsAvgFillingRate[] = [];
 
-  public barChartOptions: ChartOptions = {
+  public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     scales: {
-      yAxes: [
-        {
-          display: true,
-          ticks: {
-            min: 0,
-            max: 100,
-            stepSize: 100,
-          },
-          gridLines: {
-            offsetGridLines: false,
-          },
-        },
-      ],
-      xAxes: [
-        {
-          display: true,
-          ticks: {
-            maxTicksLimit: 5,
-          },
-        },
-      ],
-    },
-    tooltips: {
-      callbacks: {
-        label: function (tooltipItem) {
-          var label = tooltipItem.yLabel + ' %';
-          return label;
-        },
+      y: {
+        min: 0,
+        max: 100,
       },
-      displayColors: false,
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            var label = tooltipItem.parsed.y + ' %';
+            return label;
+          },
+        },
+        displayColors: false,
+      },
     },
   };
-  public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
   public barChartLegend = false;
-  public barChartPlugins = [];
-  public barChartData: ChartDataSets[] = [];
+  public barChartData!: ChartData<'bar'>;
 
   public $loading = new BehaviorSubject<boolean>(false);
 
@@ -88,9 +73,9 @@ export class BarChart implements OnInit {
           const backgroundColorTab: string[] = [];
           const borderColorTab: string[] = [];
           const avgFillingRatePercent: number[] = [];
-          this.barChartLabels = [];
+          const labels: string[] = [];
           data.forEach((element: IStatsAvgFillingRate) => {
-            this.barChartLabels.push(
+            labels.push(
               moment.utc(element.timeSlot * 3600 * 1000).format('hh a')
             );
             avgFillingRatePercent.push(
@@ -104,16 +89,19 @@ export class BarChart implements OnInit {
             backgroundColorTab.push(colors.darkOrange);
             borderColorTab.push(colors.darkOrange);
           });
-          this.barChartData = [
-            {
-              data: avgFillingRatePercent,
-              label: 'Average Filling Rate',
-              backgroundColor: backgroundColorTab,
-              borderColor: borderColorTab,
-              hoverBackgroundColor: colors.blue,
-              hoverBorderColor: colors.blue,
-            },
-          ];
+          this.barChartData = {
+            labels,
+            datasets: [
+              {
+                data: avgFillingRatePercent,
+                label: 'Average Filling Rate',
+                backgroundColor: backgroundColorTab,
+                borderColor: borderColorTab,
+                hoverBackgroundColor: colors.blue,
+                hoverBorderColor: colors.blue,
+              },
+            ],
+          };
           this.$loading.next(false);
         });
     });
@@ -130,8 +118,8 @@ export class BarChart implements OnInit {
           (element: IStatsAvgFillingRate) =>
             Math.round(element.avgFillingRate * 100)
         );
-
-        this.barChartData[0].data = avgFillingRatePercent;
+        this.barChartData.datasets[0].data = avgFillingRatePercent;
+        this.chart?.update();
       });
   }
 

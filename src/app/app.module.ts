@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { MainMap } from 'src/app/components/main-map/main-map';
 import { MainSidePanel } from 'src/app/components/main-side-panel/main-side-panel';
 import { BarChart } from 'src/app/components/bar-chart/bar-chart';
-import { ChartsModule } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { SelectScrollComponent } from 'src/app/components/select-scroll/select-scroll.component';
 import { StatsRanking } from 'src/app/components/stats-ranking/stats-ranking';
 import { AppComponent } from 'src/app/app.component';
@@ -28,7 +28,7 @@ import { HandlePlural } from 'src/app/pipe/handle-plural';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ChartsModule,
+    NgChartsModule,
     FormsModule,
     ReactiveFormsModule,
   ],
