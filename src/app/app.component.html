@@ -40,6 +40,16 @@
     </div>
 
     <div *ngSwitchCase="'stats-map'">
+      <div class="d-flex radio-analytic">
+        <input type="radio" class="btn-check" name="radioAnalytic" id="radioAnalytic1" autocomplete="off" checked (change)="changeSelectedAnalytic('avgNbBikes')"/>
+        <label class="btn" for="radioAnalytic1">
+          <i class="fas fa-bicycle fa-s"></i>
+        </label>     
+        <input type="radio" class="btn-check" name="radioAnalytic" id="radioAnalytic2" autocomplete="off" (change)="changeSelectedAnalytic('fillingRate')"/>
+        <label class="btn" for="radioAnalytic2">
+          <i class="fas fa-percent fa-xs"></i>
+        </label>
+      </div>
       <div class="d-flex justify-content-around timeslot-weekday-scroll">
         <div class="d-flex justify-content-around weekday-scroll">
           <select-scroll [values]="days" 
@@ -53,7 +63,8 @@
         </div>
       </div>
       <main-map [$stations]="$stationsStatistics"
-                [$isStatistics]="$isStatistics"></main-map>
+                [$isStatistics]="$isStatistics"
+                [$selectedAnalytic]="$selectedAnalytic"></main-map>
     </div>
 
     <div *ngSwitchCase="'stats-ranking'" class="content">

@@ -12,7 +12,7 @@ const ICON_COLORS = Object.freeze({
 
 function getColoredMarker(
   colorInitial: string,
-  fillingRate: number,
+  fillingRate: any,
   isShifted: boolean
 ): string {
   var color, borderColor;
@@ -70,6 +70,48 @@ function createColoredMarker(
   });
 }
 
+function createColoredMarkerBikeNumer(
+  avgBikesNb: any,
+  isCluster: boolean
+): any {
+  return L.divIcon({
+    className: `color-pin-test`,
+    iconAnchor: [border, size * 2 + border * 2],
+    popupAnchor: [0, -(size * 3 + border)],
+    // eslint-disable-next-line prettier/prettier
+    html: `<span style="${getColoredMarker(colors.blue, null, false)}">${
+      isCluster
+        ? `<span style="${getColoredMarker(
+            colors.blue,
+            null,
+            true
+          )}"><span style="${getNewIconForNumber()}">${
+            avgBikesNb > 999 ? '++' : avgBikesNb
+          }</span></span>`
+        : `<span style="${getNewIconForNumber()}">${
+            avgBikesNb > 999 ? '++' : avgBikesNb
+          }</span>`
+    }</span>`,
+  });
+}
+
+function getNewIconForNumber(): string {
+  return `\
+    width: ${size * 2.5}px; \
+    height: ${size * 2.5}px; \
+    display: block; \
+    left: 0px; \
+    top: 0px; \
+    text-align: center;\
+    position: relative; \
+    padding-top: 2px;\
+    border-radius: ${size * 3}px;  \
+    background-color: ${colors.white};
+    color: ${colors.blue};\
+    transform: rotate(-45deg);\
+    border: ${border}px solid ${colors.blue};`;
+}
+
 function createColorIcon(color: any): any {
   return createColoredMarker(color, null, false);
 }
@@ -78,30 +120,49 @@ export function createColorIconFromFillingRate(fillingRate: any): any {
   return createColoredMarker('', fillingRate, false);
 }
 
+export function createColorIconFromBikeNumber(avgBikesNb: any): any {
+  return createColoredMarkerBikeNumer(avgBikesNb, false);
+}
+
 export function createIconCluster(
   isStatistics: boolean,
+  selectedAnalytic: string,
   cluster: L.MarkerCluster
 ): L.Icon {
   if (!isStatistics) {
     return iconBlueCluster;
   }
   const childMarkers = cluster.getAllChildMarkers();
-  const { rates, compteur } = childMarkers.reduce(
+  const { rates, compteur, bikeNb } = childMarkers.reduce(
     (previousValue, currentValue) => {
-      // @ts-ignore: Unreachable code error
-      if (currentValue.fillingRate !== -1) {
-        return {
+      return {
+        rates:
           // @ts-ignore: Unreachable code error
-          rates: currentValue.fillingRate + previousValue.rates,
-          compteur: previousValue.compteur + 1,
-        };
-      }
-      return previousValue;
+          currentValue.fillingRate !== -1
+            ? // @ts-ignore: Unreachable code error
+              currentValue.fillingRate + previousValue.rates
+            : previousValue.rates,
+        compteur:
+          // @ts-ignore: Unreachable code error
+          currentValue.fillingRate !== -1
+            ? previousValue.compteur + 1
+            : previousValue.compteur,
+        bikeNb:
+          // @ts-ignore: Unreachable code error
+          currentValue.avgBikesNb !== -1
+            ? // @ts-ignore: Unreachable code error
+              previousValue.bikeNb + currentValue.avgBikesNb
+            : previousValue.bikeNb,
+      };
     },
-    { rates: 0, compteur: 0 }
+    { rates: 0, compteur: 0, bikeNb: 0 }
   );
   const meanClusterFillingRate = rates / compteur;
-  return createColoredMarker('', meanClusterFillingRate, true);
+  if (selectedAnalytic === 'fillingRate') {
+    return createColoredMarker('', meanClusterFillingRate, true);
+  } else {
+    return createColoredMarkerBikeNumer(bikeNb, true);
+  }
 }
 
 const iconBlueCluster = createColoredMarker(colors.blue, null, true);
