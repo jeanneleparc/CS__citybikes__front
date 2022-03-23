@@ -1,9 +1,9 @@
 <div class="btn-group-vertical">
-    <button type="button" class="btn btn-default" (click)="goToNext()">
+    <button type="button" class="btn btn-default arrow" (click)="goToNext()">
         <i class="fas fa-angle-up"></i>
       </button>
-      <button type="button" class="btn btn-default" disabled>{{ selectedValue$ | async }}</button>
-      <button type="button" class="btn btn-default" (click)="goToPrevious()">
+      <button type="button" class="btn btn-default value" disabled>{{ selectedValue$ | async }}</button>
+      <button type="button" class="btn btn-default arrow" (click)="goToPrevious()">
         <i class="fas fa-angle-down"></i>
     </button>
 </div>
