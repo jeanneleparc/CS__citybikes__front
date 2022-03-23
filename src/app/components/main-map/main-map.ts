@@ -45,8 +45,8 @@ export class MainMap implements AfterViewInit {
     this.$dynamicSelect
       .pipe(filter((station) => !!station?.id))
       .subscribe((station) => {
-        // Search marker
         this.manageSelectedMarker(station, this.stationMarkersDict[station.id]);
+        this.zoomOnStationSelected(this.stationMarkersDict[station.id]);
       });
   }
 
@@ -184,5 +184,11 @@ export class MainMap implements AfterViewInit {
 
   stationIsActive(station: IStation) {
     return station?.station_status == 'active';
+  }
+
+  zoomOnStationSelected(marker: any) {
+    var latLngs = [marker.getLatLng()];
+    var markerBounds = L.latLngBounds(latLngs);
+    this.map.fitBounds(markerBounds);
   }
 }
