@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment-timezone';
 import { BehaviorSubject, combineLatest, timer } from 'rxjs';
 import { switchMap, mergeMap } from 'rxjs/operators';
@@ -36,6 +37,14 @@ export class AppComponent implements OnInit {
     },
   ];
   currentTab: string = 'main';
+
+  // Searchbar variables
+  form = new FormGroup({
+    q: new FormControl(''),
+  });
+  suggestions: any = [];
+  noResults: boolean = false;
+  $dynamicSelect: BehaviorSubject<any> = new BehaviorSubject({});
 
   // Statistics variables
   $selectedDay: BehaviorSubject<string> = new BehaviorSubject('Monday');
@@ -158,5 +167,48 @@ export class AppComponent implements OnInit {
 
   changeSelectedTimeSlot(timeslotId: number): void {
     this.$selectedTimeSlot.next(timeslotId);
+  }
+
+  // Search Bar functions
+
+  searchBarSubmit() {
+    this.dataService
+      .getAddressAutocomplete(this.form.value.q)
+      .subscribe((data: any) => {
+        this.form.reset(this.form.value);
+        this.noResults = false;
+        this.suggestions = data;
+        if (this.suggestions.length == 0) {
+          this.noResults = true;
+        }
+      });
+  }
+
+  lookForNearestStation(location: {
+    label: string;
+    coordinates: { lat: number; long: number };
+  }) {
+    const stations = this.$stations.getValue();
+    const stationsWithDistance = stations.map((station: any) => ({
+      distance:
+        (location.coordinates.lat - station.latitude) ** 2 +
+        (location.coordinates.long - station.longitude) ** 2,
+      station,
+    }));
+    const nearestStation = stationsWithDistance.reduce(
+      (prev: any, curr: any) => {
+        return prev.distance < curr.distance ? prev : curr;
+      }
+    );
+    this.$dynamicSelect.next(nearestStation.station);
+  }
+
+  selectSuggestion(location: {
+    label: string;
+    coordinates: { lat: number; long: number };
+  }) {
+    this.form.controls['q'].markAsDirty();
+    this.form.setValue({ q: location.label });
+    this.lookForNearestStation(location);
   }
 }

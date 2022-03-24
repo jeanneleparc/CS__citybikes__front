@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MainMap } from 'src/app/components/main-map/main-map';
@@ -28,6 +28,7 @@ import { DropdownMenuComponent } from 'src/app/components/dropdown-menu/dropdown
     HttpClientModule,
     ChartsModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

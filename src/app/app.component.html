@@ -32,9 +32,40 @@
 <div class="main position-relative">
   <div [ngSwitch]="currentTab">
     <div *ngSwitchCase="'main'">
+
+      <!-- Search Bar -->
+      <div class="d-flex justify-content-start mt-2 search-bar">
+        <form [formGroup]="form" 
+              (ngSubmit)="searchBarSubmit()" 
+              class="offset-1 col-sm-11 col-md-6">
+          <div class="input-group">
+            <input class="form-control" 
+                   type="text" 
+                   formControlName="q" 
+                   placeholder="Find the nearest station" 
+                   aria-label="Find the nearest station">
+            <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
+          </div>
+          <div class="list-group">
+            <div *ngIf="!noResults && !form.controls['q'].dirty">
+              <button *ngFor="let s of suggestions" 
+                    type="button" 
+                    class="list-group-item list-group-item-action text-start"
+                    (click)="selectSuggestion(s)">
+                {{ s.label }}
+              </button>
+            </div>
+            <button *ngIf="noResults && !form.controls['q'].dirty" type="button" class="list-group-item list-group-item-action disabled text-start">
+              No results
+            </button>
+          </div>
+        </form>
+      </div>
+
       <main-map [$stations]="$stations" 
                 [$selectedStation]="$selectedStation"
                 [$isStatistics]="$isStatistics" 
+                [$dynamicSelect]="$dynamicSelect"
                 ($selectedStationChange)="changeSelectedStation($event)"></main-map>
       <main-side-panel [$selectedStation]="$selectedStation" [loading]="loading"></main-side-panel>
     </div>

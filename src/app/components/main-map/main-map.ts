@@ -24,6 +24,7 @@ export class MainMap implements AfterViewInit {
   @Input() $selectedStation: BehaviorSubject<any> = new BehaviorSubject({});
   @Input() $selectedAnalytic: BehaviorSubject<string> = new BehaviorSubject('');
   @Input() $isStatistics: BehaviorSubject<any> = new BehaviorSubject(false);
+  @Input() $dynamicSelect: BehaviorSubject<any> = new BehaviorSubject({});
   @Output() $selectedStationChange: BehaviorSubject<any> = new BehaviorSubject(
     {}
   );
@@ -31,6 +32,7 @@ export class MainMap implements AfterViewInit {
   prevSelectedStation: any;
   markers: any;
   private map: any;
+  stationMarkersDict: any = {};
 
   constructor() {}
 
@@ -39,6 +41,13 @@ export class MainMap implements AfterViewInit {
     this.$stations.subscribe(() => {
       this.refreshData();
     });
+    // Dynamic select
+    this.$dynamicSelect
+      .pipe(filter((station) => !!station?.id))
+      .subscribe((station) => {
+        this.manageSelectedMarker(station, this.stationMarkersDict[station.id]);
+        this.zoomOnStationSelected(this.stationMarkersDict[station.id]);
+      });
   }
 
   private initMap(): void {
@@ -92,6 +101,7 @@ export class MainMap implements AfterViewInit {
       // marker.bindPopup(this.createMarkerPopup(station)); // to add popup
     }
 
+    // Closing panel
     this.$selectedStation
       .pipe(filter((station) => station === null))
       .subscribe(() => {
@@ -115,6 +125,7 @@ export class MainMap implements AfterViewInit {
       marker = L.marker([latitude, longitude], { icon: iconYellow });
       this.prevSelectedMarker = marker;
     }
+    this.stationMarkersDict[station.id] = marker;
     this.markers.addLayer(marker);
   }
 
@@ -146,7 +157,7 @@ export class MainMap implements AfterViewInit {
 
   manageSelectedMarker(station: IStation, newSelectedMarker: any) {
     newSelectedMarker.setIcon(iconYellow);
-    this.resetPrevMarker();
+    if (this.prevSelectedMarker !== newSelectedMarker) this.resetPrevMarker();
     this.$selectedStationChange.next(station);
     this.prevSelectedStation = station;
     this.prevSelectedMarker = newSelectedMarker;
@@ -173,5 +184,11 @@ export class MainMap implements AfterViewInit {
 
   stationIsActive(station: IStation) {
     return station?.station_status == 'active';
+  }
+
+  zoomOnStationSelected(marker: any) {
+    const latLngs = [marker.getLatLng()];
+    const markerBounds = L.latLngBounds(latLngs);
+    this.map.fitBounds(markerBounds);
   }
 }
