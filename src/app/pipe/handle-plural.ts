@@ -7,6 +7,6 @@ export class HandlePlural implements PipeTransform {
     if (number <= 1) {
       name = name.slice(0, -1);
     }
-    return number.toString() + ' ' + name;
+    return `${number.toString()} ${name}`;
   }
 }
