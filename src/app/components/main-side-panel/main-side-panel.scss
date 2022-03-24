@@ -88,18 +88,54 @@
   width: var(--taille);
   background-color: var(--main-color);
   height: 15px;
+  position: relative;
+  display: inline-block;
 }
 
 .all-bars .barre:first-child{
-  width: var(--taille);
-  background-color: var(--main-color);
-  height: 15px;
   border-radius: 25px 0px 0px 25px;
 }
 
 .all-bars .barre:last-child{
-  width: var(--taille);
-  background-color: var(--main-color);
-  height: 15px;
   border-radius: 0px 25px 25px 0px;
+}
+
+.all-bars .barre:only-child{
+  border-radius: 25px 25px 25px 25px;
+}
+
+/* Tooltip text */
+.all-bars .barre .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: colors.$white;
+  color: colors.$black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  pointer-events: none; 
+  box-shadow: 2px 2px 1px colors.$box-shadow;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  width: 120px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.all-bars .barre:hover .tooltiptext {
+  visibility: visible;
+}
+
+.all-bars .barre .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: colors.$white transparent transparent transparent;
 }

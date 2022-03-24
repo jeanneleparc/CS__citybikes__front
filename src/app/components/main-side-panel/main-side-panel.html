@@ -10,19 +10,29 @@
       <div class="all-bars">
         <div *ngIf="(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)!==0" 
               class="barre" 
-              style="--taille: {{(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greenBar}};"></div>
+              style="--taille: {{(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greenBar}};">
+              <span class="tooltiptext">{{ ($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes }} available bikes </span>
+        </div>
         <div *ngIf="($selectedStation | async)?.num_ebikes !== 0" 
               class="barre" 
-              style="--taille: {{($selectedStation | async)?.num_ebikes/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.blueBar}};"></div>
+              style="--taille: {{($selectedStation | async)?.num_ebikes/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.blueBar}};">
+              <span class="tooltiptext">{{ ($selectedStation | async)?.num_ebikes }} available e-bikes </span>
+        </div>
         <div *ngIf="($selectedStation | async)?.num_docks_available !== 0" 
               class="barre" 
-              style="--taille: {{($selectedStation | async)?.num_docks_available/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greyBar}};"></div>
+              style="--taille: {{($selectedStation | async)?.num_docks_available/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greyBar}};">
+              <span class="tooltiptext">{{ ($selectedStation | async)?.num_docks_available }} available docks </span>
+        </div>
         <div *ngIf="($selectedStation | async)?.num_docks_disabled !== 0" 
               class="barre"
-              style="--taille: {{($selectedStation | async)?.num_docks_disabled/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};"></div>
+              style="--taille: {{($selectedStation | async)?.num_docks_disabled/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};">
+              <span class="tooltiptext">{{ ($selectedStation | async)?.num_bikes_disabled }} disabled bikes </span>
+        </div>
         <div *ngIf="($selectedStation | async)?.num_bikes_disabled !== 0" 
               class="barre" 
-              style="--taille: {{($selectedStation | async)?.num_bikes_disabled/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};"></div>
+              style="--taille: {{($selectedStation | async)?.num_bikes_disabled/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};">
+              <span class="tooltiptext">{{($selectedStation | async)?.num_bikes_disabled }} disabled docks </span>
+            </div>
       </div>
       <div class="text-with-icon">
         <div class="icon">
