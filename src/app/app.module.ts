@@ -11,6 +11,7 @@ import { StatsRanking } from 'src/app/components/stats-ranking/stats-ranking';
 import { AppComponent } from 'src/app/app.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { DropdownMenuComponent } from 'src/app/components/dropdown-menu/dropdown-menu';
+import { HandlePlural } from 'src/app/pipe/handle-plural';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { DropdownMenuComponent } from 'src/app/components/dropdown-menu/dropdown
     SelectScrollComponent,
     StatsRanking,
     DropdownMenuComponent,
+    HandlePlural,
   ],
   imports: [
     BrowserModule,
@@ -30,6 +32,7 @@ import { DropdownMenuComponent } from 'src/app/components/dropdown-menu/dropdown
     FormsModule,
     ReactiveFormsModule,
   ],
+  exports: [HandlePlural],
   providers: [],
   bootstrap: [AppComponent],
 })
