@@ -11,7 +11,7 @@ import { DataService } from './data.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  $stations: BehaviorSubject<any> = new BehaviorSubject([]);
+  $stations: BehaviorSubject<[]> = new BehaviorSubject([]);
   $stationsStatistics: BehaviorSubject<[]> = new BehaviorSubject([]);
   $isStatistics: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   $lastUpdatedTime: BehaviorSubject<string> = new BehaviorSubject('');
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   ];
   currentTab: string = 'main';
 
-  // Searbar variables
+  // Searchbar variables
   form = new FormGroup({
     q: new FormControl(''),
   });
