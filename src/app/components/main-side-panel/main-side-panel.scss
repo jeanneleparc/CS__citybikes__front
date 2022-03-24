@@ -86,7 +86,7 @@
   margin-right: 30px;
 }
 
-.all-bars .barre{
+.all-bars .bar{
   width: var(--taille);
   background-color: var(--main-color);
   height: 15px;
@@ -94,20 +94,20 @@
   display: inline-block;
 }
 
-.all-bars .barre:first-child{
+.all-bars .bar:first-child{
   border-radius: 25px 0px 0px 25px;
 }
 
-.all-bars .barre:last-child{
+.all-bars .bar:last-child{
   border-radius: 0px 25px 25px 0px;
 }
 
-.all-bars .barre:only-child{
+.all-bars .bar:only-child{
   border-radius: 25px 25px 25px 25px;
 }
 
 /* Tooltip text */
-.all-bars .barre .tooltiptext {
+.all-bars .bar .tooltiptext {
   visibility: hidden;
   width: 120px;
   background-color: colors.$white;
@@ -127,11 +127,11 @@
   margin-left: -60px;
 }
 
-.all-bars .barre:hover .tooltiptext {
+.all-bars .bar:hover .tooltiptext {
   visibility: visible;
 }
 
-.all-bars .barre .tooltiptext::after {
+.all-bars .bar .tooltiptext::after {
   content: " ";
   position: absolute;
   top: 100%; /* At the bottom of the tooltip */
