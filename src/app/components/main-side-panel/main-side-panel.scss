@@ -14,7 +14,7 @@
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
 }
 
-.sidepannel-title {
+.sidepanel-title {
   background-color: colors.$orange;
   display: flex;
 }
@@ -79,6 +79,7 @@
   height: 30%;
 }
 
+/* Repartition bar */
 .all-bars{
   display: flex;
   margin-bottom: 20px;
@@ -142,6 +143,8 @@
   border-color: colors.$white transparent transparent transparent;
 }
 
+
+/* Utilities */
 .flex {
   display: flex;
 }
@@ -171,15 +174,24 @@
   width: 100%;
 }
 
-.sidepannel-tab {
+/* Sidepanel tabs */
+.sidepanel-nav {
+  background-color: colors.$navbar-background;
+}
+
+.nav-ul {
+  flex-direction: row;
+}
+
+.sidepanel-tab {
   text-align: center;
   width: 50%;
 }
 
-.sidepannel-tab a {
-  color: grey;
+.sidepanel-tab a {
+  color: colors.$grey;
 }
 
 .active a {
-  color: black !important;
+  color: colors.$black !important;
 }

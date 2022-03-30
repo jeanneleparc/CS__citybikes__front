@@ -40,7 +40,7 @@ export class BarChart implements OnInit {
       tooltip: {
         callbacks: {
           label: function (tooltipItem) {
-            var label = tooltipItem.parsed.y + ' %';
+            var label = `${tooltipItem.parsed.y}%`;
             return label;
           },
         },

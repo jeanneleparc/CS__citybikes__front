@@ -13,8 +13,10 @@ export const colors = {
   darkGreen: '#0a6b2a',
   greenBar: '#b4e39d',
   greyBar: '#e1e6e2',
+  grey: '#808080',
   boxShadow: 'rgba(0,0,0,0.26)',
   boxShadowIcon: 'rgba(55,55,55,0.3)',
   boxShadowSidePanel1: 'rgba(60,64,67,0.3)',
   boxShadowSidePanel2: 'rgba(60,64,67,0.15)',
+  navbarBackground: '#e3f2fd',
 } as const;

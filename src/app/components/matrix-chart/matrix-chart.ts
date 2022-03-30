@@ -34,6 +34,7 @@ export class MatricChart implements OnInit {
   loading: boolean = false;
 
   firstHour = 6;
+  lastHour = 22;
   timeslotLabels: string[] = [...Array(16).keys()].map(
     (i) =>
       `${moment()
@@ -78,7 +79,7 @@ export class MatricChart implements OnInit {
 
   getHours() {
     const hours: any[] = [];
-    for (let i = 6; i <= 22; i++) {
+    for (let i = this.firstHour; i <= this.lastHour; i++) {
       hours.push(i);
     }
     return hours;
@@ -87,13 +88,14 @@ export class MatricChart implements OnInit {
   generateMatrixData(): Array<{ x: number; y: number; v: number }> {
     const matrixData: any[] = [];
 
-    const firstHour = 6;
-    const lastHour = 22;
-
     WEEK_DAYS.forEach((weekday) => {
-      for (let timeSlot = firstHour; timeSlot <= lastHour; timeSlot++) {
+      for (
+        let timeSlot = this.firstHour;
+        timeSlot <= this.lastHour;
+        timeSlot++
+      ) {
         matrixData.push({
-          y: this.timeslotLabels[timeSlot - firstHour],
+          y: this.timeslotLabels[timeSlot - this.firstHour],
           x: weekday,
           v: Math.round(
             this.stationStats[weekday][timeSlot].avgFillingRate * 100
