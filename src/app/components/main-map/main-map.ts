@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import { secrets } from 'src/environments/secrets';
 
 import {
   iconBlue,
@@ -51,6 +52,7 @@ export class MainMap implements AfterViewInit {
   }
 
   private initMap(): void {
+    const LEAFLET_API_KEY = secrets.leafletApiKey;
     this.map = L.map('map').setView([40.77, -73.968565], 13);
     L.tileLayer(
       'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
@@ -61,8 +63,7 @@ export class MainMap implements AfterViewInit {
         id: 'mapbox/streets-v11',
         tileSize: 512,
         zoomOffset: -1,
-        accessToken:
-          'pk.eyJ1IjoiY2xhcmEtbmkiLCJhIjoiY2t5MzQ3cXQ2MHJ5ZjJybWtmN2w5b3dqMSJ9.zrQ2bq62jaJdYXSPmvxMKA',
+        accessToken: LEAFLET_API_KEY,
       }
     ).addTo(this.map);
   }
