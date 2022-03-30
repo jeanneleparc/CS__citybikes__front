@@ -13,6 +13,18 @@ export class MainSidePanel implements OnInit {
   sidePanel: any;
   sidePanelIsOpen: boolean = false;
   colors: any = colors;
+  tabs: Array<{ name: string; title: string }> = [
+    {
+      name: 'main',
+      title: 'Main',
+    },
+    {
+      name: 'matrix',
+      title: 'Stats by week',
+    },
+  ];
+  currentTab: string = 'main';
+
   constructor() {}
 
   ngOnInit(): void {
@@ -45,5 +57,9 @@ export class MainSidePanel implements OnInit {
 
   isStationActive(station: any) {
     return station?.station_status == 'active';
+  }
+
+  changeTab(tab: any) {
+    this.currentTab = tab.name;
   }
 }

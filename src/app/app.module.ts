@@ -12,6 +12,7 @@ import { AppComponent } from 'src/app/app.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { DropdownMenuComponent } from 'src/app/components/dropdown-menu/dropdown-menu';
 import { HandlePlural } from 'src/app/pipe/handle-plural';
+import { MatricChart } from 'src/app/components/matrix-chart/matrix-chart';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { HandlePlural } from 'src/app/pipe/handle-plural';
     StatsRanking,
     DropdownMenuComponent,
     HandlePlural,
+    MatricChart,
   ],
   imports: [
     BrowserModule,
