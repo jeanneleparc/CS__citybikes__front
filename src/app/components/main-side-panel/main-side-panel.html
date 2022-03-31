@@ -1,4 +1,4 @@
-<div id="mySidepanel" class="sidepanel flex-column h-100">
+<div id="mySidepanel" class="sidepanel">
   <div class="flex-auto">
     <div class="sidepanel-title">
     <a href="javascript:void(0)" class="close-btn" (click)="closeSidePanel()">&times;</a>
@@ -7,7 +7,7 @@
   </div>
 
   <div *ngIf="($selectedStation | async) != {}; else spinner" class="sidepanel-container flex-fill-empty overflow-hidden">
-    <div *ngIf="isStationActive($selectedStation | async); else inactiveStationcontainer" class="active-station-container h-100 w-100 flex-column">
+    <div *ngIf="isStationActive($selectedStation | async); else inactiveStationcontainer" class="active-station-container h-100 w-100">
       <nav class="navbar navbar-expand-lg navbar-light flex-auto w-100 sidepanel-nav"> 
         <ul class="navbar-nav w-100 nav-ul">
           <li *ngFor="let tab of tabs" class="nav-item sidepanel-tab" [class.active]="currentTab == tab.name" (click)="changeTab(tab)">

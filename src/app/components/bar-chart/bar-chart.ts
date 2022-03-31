@@ -61,7 +61,11 @@ export class BarChart implements OnInit {
     this.day = moment().tz('America/New_York').format('dddd');
     this.hour = parseInt(moment().tz('America/New_York').format('HH'), 10);
     this.$selectedStation.subscribe((selectedStation) => {
-      if (_.isNil(selectedStation) || _.isEmpty(selectedStation)) {
+      if (
+        _.isNil(selectedStation) ||
+        _.isEmpty(selectedStation) ||
+        selectedStation.id == this.idStation
+      ) {
         return;
       }
       this.$loading.next(true);

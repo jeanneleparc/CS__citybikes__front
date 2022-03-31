@@ -35,7 +35,9 @@ export class MatricChart implements OnInit {
 
   firstHour = 6;
   lastHour = 22;
-  timeslotLabels: string[] = [...Array(16).keys()].map(
+  timeslotLabels: string[] = [
+    ...Array(this.lastHour - this.firstHour).keys(),
+  ].map(
     (i) =>
       `${moment()
         .startOf('day')
