@@ -6,8 +6,7 @@ import { environment } from './../environments/environment';
   providedIn: 'root',
 })
 export class DataService {
-  apiURL = environment.apiURL;
-  private REST_API_SERVER = `${this.apiURL}:8000`;
+  private REST_API_SERVER = environment.apiURL;
 
   constructor(private httpClient: HttpClient) {}
 
