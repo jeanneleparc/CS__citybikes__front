@@ -1,59 +1,66 @@
 <div id="mySidepanel" class="sidepanel">
-  <div>
-    <div class="sidepannel-title">
+  <div class="flex-auto">
+    <div class="sidepanel-title">
     <a href="javascript:void(0)" class="close-btn" (click)="closeSidePanel()">&times;</a>
     <h1>{{ ($selectedStation | async)?.name }}</h1>
     </div>
   </div>
-  <div *ngIf="!loading; else spinner" class="sidepannel-container mt-4">
-    <div *ngIf="isStationActive($selectedStation | async); else inactiveStationcontainer" class="active-station-container">
-      <div class="all-bars">
-        <div *ngIf="(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)!==0" 
-              class="bar" 
-              style="--taille: {{(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greenBar}};">
-              <span class="tooltiptext">{{ (($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes) | handlePlural : "available bikes"}}</span>
+
+  <div *ngIf="($selectedStation | async) != {}; else spinner" class="sidepanel-container flex-fill-empty overflow-hidden">
+    <div *ngIf="isStationActive($selectedStation | async); else inactiveStationcontainer" class="active-station-container h-100 w-100">
+      <nav class="navbar navbar-expand-lg navbar-light flex-auto w-100 sidepanel-nav"> 
+        <ul class="navbar-nav w-100 nav-ul">
+          <li *ngFor="let tab of tabs" class="nav-item sidepanel-tab" [class.active]="currentTab == tab.name" (click)="changeTab(tab)">
+            <a class="nav-link" href="#">{{ tab.title }}</a>
+          </li>
+        </ul>
+      </nav>
+      <div [ngSwitch]="currentTab" class="ph-30 flex-fill-empty overflow-auto">
+        <div *ngSwitchCase="'main'">
+          <div class="all-bars mt-4">
+            <div *ngIf="(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)!==0" 
+                  class="bar" 
+                  style="--taille: {{(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greenBar}};">
+                  <span class="tooltiptext">{{ (($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes) | handlePlural : "available bikes"}}</span>
+            </div>
+            <div *ngIf="($selectedStation | async)?.num_ebikes !== 0" 
+                  class="bar" 
+                  style="--taille: {{($selectedStation | async)?.num_ebikes/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.blueBar}};">
+                  <span class="tooltiptext">{{ ($selectedStation | async)?.num_ebikes | handlePlural : "available e-bikes"}}</span>
+            </div>
+            <div *ngIf="($selectedStation | async)?.num_docks_available !== 0" 
+                  class="bar" 
+                  style="--taille: {{($selectedStation | async)?.num_docks_available/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greyBar}};">
+                  <span class="tooltiptext">{{ ($selectedStation | async)?.num_docks_available  | handlePlural : "available docks"}}</span>
+            </div>
+            <div *ngIf="(($selectedStation | async)?.num_docks_disabled + ($selectedStation | async)?.num_bikes_disabled) !== 0" 
+                  class="bar"
+                  style="--taille: {{(($selectedStation | async)?.num_docks_disabled + ($selectedStation | async)?.num_bikes_disabled)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};">
+                  <span class="tooltiptext">{{ (($selectedStation | async)?.num_bikes_disabled + ($selectedStation | async)?.num_docks_disabled) | handlePlural : "disabled equipments" }}</span>
+            </div>
+          </div>
+          <div class="text-with-icon mt-4">
+            <div class="icon">
+              <i class="fas fa-bicycle fa-2x"></i>
+            </div>
+            <div class="text-ebikes">
+              <p>{{ ($selectedStation | async)?.num_bikes_available | handlePlural : "available bikes"}}</p>
+              <p>(including {{ ($selectedStation | async)?.num_ebikes | handlePlural : "e-bikes" }})</p>
+            </div>
+          </div>
+          <div class="text-with-icon">
+            <div class="icon">
+              <i class="fas fa-parking fa-2x"></i>
+            </div>
+            <p>{{ ($selectedStation | async)?.num_docks_available }} available docks</p>
+          </div>
+          <bar-chart [$selectedStation]="$selectedStation"></bar-chart>
         </div>
-        <div *ngIf="($selectedStation | async)?.num_ebikes !== 0" 
-              class="bar" 
-              style="--taille: {{($selectedStation | async)?.num_ebikes/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.blueBar}};">
-              <span class="tooltiptext">{{ ($selectedStation | async)?.num_ebikes | handlePlural : "available e-bikes"}}</span>
-        </div>
-        <div *ngIf="($selectedStation | async)?.num_docks_available !== 0" 
-              class="bar" 
-              style="--taille: {{($selectedStation | async)?.num_docks_available/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greyBar}};">
-              <span class="tooltiptext">{{ ($selectedStation | async)?.num_docks_available  | handlePlural : "available docks"}}</span>
-        </div>
-        <div *ngIf="(($selectedStation | async)?.num_docks_disabled + ($selectedStation | async)?.num_bikes_disabled) !== 0" 
-              class="bar"
-              style="--taille: {{(($selectedStation | async)?.num_docks_disabled + ($selectedStation | async)?.num_bikes_disabled)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.orange}};">
-              <span class="tooltiptext">{{ (($selectedStation | async)?.num_bikes_disabled + ($selectedStation | async)?.num_docks_disabled) | handlePlural : "disabled equipments" }}</span>
+        <div *ngSwitchCase="'matrix'" class="mt-4">
+          <matrix-chart [$selectedStation]="$selectedStation"></matrix-chart>
         </div>
       </div>
-      <div class="text-with-icon">
-        <div class="icon">
-          <i class="fas fa-bicycle fa-2x"></i>
-        </div>
-        <div class="text-ebikes">
-          <p>{{ ($selectedStation | async)?.num_bikes_available | handlePlural : "available bikes"}}</p>
-          <p>(including {{ ($selectedStation | async)?.num_ebikes | handlePlural : "e-bikes" }})</p>
-        </div>
-      </div>
-      <div class="text-with-icon mt-2">
-        <div class="icon">
-          <i class="fas fa-parking fa-2x"></i>
-        </div>
-        <p>{{ ($selectedStation | async)?.num_docks_available | handlePlural : "available docks" }}</p>
-      </div>
-      <bar-chart [$selectedStation]="$selectedStation"></bar-chart>
     </div>
-    <ng-template #inactiveStationcontainer>
-      <div class="text-with-icon">
-        <div class="icon">
-          <i class="fas fa-times-circle fa-2x"></i>
-        </div>
-        <p>Disabled station</p>
-      </div>
-    </ng-template>
   </div>
 </div>
 
@@ -62,5 +69,14 @@
     <div class="spinner-border" role="status">
       <span class="sr-only">Loading...</span>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #inactiveStationcontainer>
+  <div class="text-with-icon mt-4 ph-30">
+    <div class="icon">
+      <i class="fas fa-times-circle fa-2x"></i>
+    </div>
+    <p>Disabled station</p>
   </div>
 </ng-template>

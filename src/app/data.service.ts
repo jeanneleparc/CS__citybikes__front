@@ -24,6 +24,13 @@ export class DataService {
     );
   }
 
+  public sendPostStatsByStationIdRequest(idStation: Number) {
+    return this.httpClient.post<any>(
+      `${this.REST_API_SERVER}/stats_by_station`,
+      { id: idStation }
+    );
+  }
+
   public sendPostAvgFillingRateByTimeslotByDayRequest(
     timeSlot: Number,
     day: String

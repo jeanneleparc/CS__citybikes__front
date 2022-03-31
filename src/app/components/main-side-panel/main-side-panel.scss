@@ -12,9 +12,11 @@
   background-color: colors.$white;
   overflow-x: hidden; /* Disable horizontal scroll */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
+  display: flex;
+  flex-direction: column;
 }
 
-.sidepannel-title {
+.sidepanel-title {
   background-color: colors.$orange;
   display: flex;
 }
@@ -41,7 +43,7 @@
   margin: 0px;
 }
 
-.sidepannel-container {
+.ph-30 {
   padding: 0 30px;
 }
 
@@ -53,7 +55,7 @@
 .text-with-icon {
   display: flex;
   align-items: center;
-  padding: 3px;
+  padding: 3px 30px;
   font-size: large;
 }
 
@@ -79,6 +81,7 @@
   height: 30%;
 }
 
+/* Repartition bar */
 .all-bars{
   display: flex;
   margin-bottom: 20px;
@@ -140,4 +143,41 @@
   border-width: 5px;
   border-style: solid;
   border-color: colors.$white transparent transparent transparent;
+}
+
+
+/* Utilities */
+
+.flex-fill-empty {
+  flex: 1 1 auto;
+}
+
+.flex-auto {
+  flex: 0 1 auto;
+}
+
+.overflow-auto {
+  overflow-y: auto;
+}
+
+/* Sidepanel tabs */
+.sidepanel-nav {
+  background-color: colors.$navbar-background;
+}
+
+.nav-ul {
+  flex-direction: row;
+}
+
+.sidepanel-tab {
+  text-align: center;
+  width: 50%;
+}
+
+.sidepanel-tab a {
+  color: colors.$grey;
+}
+
+.active a {
+  color: colors.$black !important;
 }

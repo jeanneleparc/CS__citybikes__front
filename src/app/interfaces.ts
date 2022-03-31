@@ -22,3 +22,13 @@ export interface IStationStat extends IStationBase {
   avgBikesNb: number;
   fillingRate: number;
 }
+
+export const WEEK_DAYS: string[] = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
