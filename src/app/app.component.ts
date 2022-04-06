@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
   }
 
   autoRefreshData(): void {
-    timer(0, 1 * 60 * 1000) //  refresh automatically every minute
+    timer(0, 30 * 1000) //  refresh automatically every 30 secondes
       .pipe(mergeMap(() => this.dataService.sendGetStatusRequest()))
       .subscribe((data) => {
         this.$stations.next(data);
