@@ -17,7 +17,7 @@
       </nav>
       <div [ngSwitch]="currentTab" class="ph-30 flex-fill-empty overflow-auto">
         <div *ngSwitchCase="'main'">
-          <div class="all-bars mt-4">
+          <div class="all-bars">
             <div *ngIf="(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)!==0" 
                   class="bar" 
                   style="--taille: {{(($selectedStation | async)?.num_bikes_available - ($selectedStation | async)?.num_ebikes)/($selectedStation | async)?.capacity *100}}% ;--main-color: {{colors.greenBar}};">
